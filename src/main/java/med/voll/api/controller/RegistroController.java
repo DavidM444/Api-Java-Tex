@@ -1,10 +1,8 @@
 package med.voll.api.controller;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import med.voll.api.Registro.DatosListadoRegistro;
-import med.voll.api.Registro.DatosRegistroRegistro;
-import med.voll.api.Registro.Registro;
-import med.voll.api.Registro.RegistroRepository;
+import med.voll.api.Registro.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,5 +25,15 @@ public class RegistroController {
     @GetMapping
     public List<DatosListadoRegistro> listadoRegistro(){
         return registroRepository.findAll().stream().map(DatosListadoRegistro::new).toList();
+    }
+
+
+    //actualizacion de registros
+    @PutMapping
+    @Transactional
+    public void actualizarRegistro(@RequestBody @Valid DatosActualizarRegistro datosActualizarRegistro){
+        System.out.println(datosActualizarRegistro);
+        Registro registro = registroRepository.getReferenceById(datosActualizarRegistro.re_id());
+        registro.actualizarDatos(datosActualizarRegistro);
     }
 }
