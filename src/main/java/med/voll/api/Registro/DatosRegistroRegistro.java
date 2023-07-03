@@ -1,4 +1,10 @@
 package med.voll.api.Registro;
 
-public record DatosRegistroRegistro(String fecha,String usuario, Integer usuarioId,Integer proveedorId) {
+import jakarta.validation.constraints.NotBlank;
+
+public record DatosRegistroRegistro(
+        @NotBlank
+        String re_fecha,
+        Integer proveedor_pr_id
+) {
 }

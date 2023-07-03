@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import med.voll.api.Dimensiones.Dimensiones;
 
 
 @Table(name="registros")
@@ -21,20 +20,17 @@ public class Registro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    private Long id;
-    private String fecha;
-    private String usuario;
-    private String usuarioId;
-    private String proveedor;
+    private Long re_id;
+    private String re_fecha;
+    private Integer proveedor_pr_id;
 
-    @
-    private Dimensiones dimensiones;
+
+
 
     public Registro(DatosRegistroRegistro datosRegistroRegistro) {
-        this.fecha = datosRegistroRegistro.fecha();
-        this.proveedor = datosRegistroRegistro.proveedorId();
-        this.usuario = datosRegistroRegistro.usuario();
-        this.usuarioId = datosRegistroRegistro.usuarioId();
+        this.re_fecha = datosRegistroRegistro.re_fecha();
+        this.proveedor_pr_id = datosRegistroRegistro.proveedor_pr_id();
+
     }
 
 }

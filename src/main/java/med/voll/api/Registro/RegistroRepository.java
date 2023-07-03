@@ -1,5 +1,6 @@
 package med.voll.api.Registro;
 
-public interface RegistroRepository extends JpaRepository<> {
+import org.springframework.data.jpa.repository.JpaRepository;
 
+public interface RegistroRepository extends JpaRepository<Registro,Long> {
 }
