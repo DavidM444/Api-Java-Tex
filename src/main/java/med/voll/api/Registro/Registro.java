@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 
 @Table(name="registros")
@@ -24,7 +27,7 @@ public class Registro {
 
     private String re_fecha;
     private Integer proveedor_pr_id;
-
+<RE
 
 
 
@@ -35,7 +38,7 @@ public class Registro {
     }
 
     public void actualizarDatos(@Valid DatosActualizarRegistro datosActualizarRegistro) {
-        System.out.println("Entro a actualizar datos---- id a string " + datosActualizarRegistro.re_id().toString());
+        System.out.println("Entro a actualizar datos---- id a string " + datosActualizarRegistro.re_id());
         if(datosActualizarRegistro.re_fecha()!=null){
             this.re_fecha= datosActualizarRegistro.re_fecha();
         }
@@ -43,4 +46,8 @@ public class Registro {
             this.re_id = datosActualizarRegistro.re_id();
         }
     }
+
+
+
+
 }
