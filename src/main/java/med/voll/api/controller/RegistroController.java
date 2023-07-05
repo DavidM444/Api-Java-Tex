@@ -2,12 +2,15 @@ package med.voll.api.controller;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import med.voll.api.Dimensiones.DatosRegistroDimensiones;
 import med.voll.api.Registro.*;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -18,10 +21,15 @@ public class RegistroController {
     @Autowired
     private RegistroRepository registroRepository;
     @PostMapping
-    public void registrarRegistro(@RequestBody @Valid DatosRegistroRegistro datosRegistroRegistro){
+    public ResponseEntity<DatosRespuestaRegistro> registrarRegistro(@RequestBody @Valid DatosRegistroRegistro datosRegistroRegistro, UriComponentsBuilder uriComponentsBuilder){
         System.out.println("la request llego!!!!!!");
         System.out.println(datosRegistroRegistro);
-        registroRepository.save(new Registro(datosRegistroRegistro));
+        Registro registro =  registroRepository.save(new Registro(datosRegistroRegistro));
+        DatosRespuestaRegistro datosRespuestaRegistro = new DatosRespuestaRegistro(registro.getRe_id(), registro.getRe_fecha(),registro.getProveedor_pr_id());
+
+        URI url = uriComponentsBuilder.path("/registro/{id}").buildAndExpand(registro.getRe_id()).toUri();
+        return ResponseEntity.created(url).body(datosRespuestaRegistro);
+
     }
 
     @GetMapping
@@ -56,5 +64,6 @@ public class RegistroController {
         Registro registro = registroRepository.getReferenceById(id);
         var datosRegistro = new DatosRespuestaRegistro(registro.getRe_id(),registro.getRe_fecha(),registro.getProveedor_pr_id());
         return ResponseEntity.ok(datosRegistro);
+
     }
 }
