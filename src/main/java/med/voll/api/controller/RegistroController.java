@@ -23,6 +23,7 @@ public class RegistroController {
 
     @Autowired
     private RegistroRepository registroRepository;
+    @Autowired
     private DimensionesRepository dimensionesRepository;
 
     @PostMapping
@@ -30,8 +31,8 @@ public class RegistroController {
         System.out.println("la request llego!!!!!!");
         System.out.println(datosRegistroTodo);
 
-        DatosDimensiones datosDimensiones = new DatosDimensiones(datosRegistroTodo.datosDimensiones().dm_altura(),datosRegistroTodo.datosDimensiones().dm_ancho(),
-                datosRegistroTodo.datosDimensiones().registro_re_id());
+        DatosDimensiones datosDimensiones = new DatosDimensiones(datosRegistroTodo.dimensiones().dm_altura(),datosRegistroTodo.dimensiones().dm_ancho(),
+                datosRegistroTodo.dimensiones().registro_re_id());
         Dimensiones dimensiones = dimensionesRepository.save(new Dimensiones(datosDimensiones));
         DatosRegistroRegistro datosRegistroRegistro = new DatosRegistroRegistro(datosRegistroTodo.re_fecha(), datosRegistroTodo.proveedor_pr_id());
         Registro registro =  registroRepository.save(new Registro(datosRegistroRegistro));

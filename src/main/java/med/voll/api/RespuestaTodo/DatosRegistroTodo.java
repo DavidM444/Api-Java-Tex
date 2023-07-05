@@ -6,5 +6,5 @@ import med.voll.api.Dimensiones.DatosDimensiones;
 public record DatosRegistroTodo(@NotBlank
                                 String re_fecha,
                                 Integer proveedor_pr_id,
-                                DatosDimensiones datosDimensiones){
+                                DatosDimensiones dimensiones){
 }
