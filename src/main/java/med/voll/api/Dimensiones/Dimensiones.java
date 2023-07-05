@@ -1,28 +1,30 @@
 package med.voll.api.Dimensiones;
 
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
-@Embeddable
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 
+@Entity
+@Table(name = "dimension")
 public class Dimensiones {
+    private double dm_altura;
+    private double dm_ancho;
+    @Id
+    private Long registro_re_id;
 
-    private double altura;
-    private double ancho;
-    private double area;
-
-    private double conocerArea(){
-        return this.area=this.altura*this.ancho;
+    public Dimensiones(DatosDimensiones datosDimensiones) {
+        this.dm_altura = datosDimensiones.dm_altura();
+        this.dm_ancho = datosDimensiones.dm_ancho();
+        this.registro_re_id = datosDimensiones.registro_re_id();
     }
+    //el area se maneja con trigeers
 
 }
