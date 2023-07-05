@@ -2,9 +2,12 @@ package med.voll.api.controller;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import med.voll.api.Dimensiones.DatosRegistroDimensiones;
+import med.voll.api.Dimensiones.DatosDimensiones;
+import med.voll.api.Dimensiones.Dimensiones;
+import med.voll.api.Dimensiones.DimensionesRepository;
+import med.voll.api.RespuestaTodo.DatosRegistroTodo;
+import med.voll.api.RespuestaTodo.DatosRespuestaTodo;
 import med.voll.api.Registro.*;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,15 +23,24 @@ public class RegistroController {
 
     @Autowired
     private RegistroRepository registroRepository;
+    private DimensionesRepository dimensionesRepository;
+
     @PostMapping
-    public ResponseEntity<DatosRespuestaRegistro> registrarRegistro(@RequestBody @Valid DatosRegistroRegistro datosRegistroRegistro, UriComponentsBuilder uriComponentsBuilder){
+    public ResponseEntity<DatosRespuestaTodo> registrarRegistro(@RequestBody @Valid DatosRegistroTodo datosRegistroTodo, UriComponentsBuilder uriComponentsBuilder){
         System.out.println("la request llego!!!!!!");
-        System.out.println(datosRegistroRegistro);
+        System.out.println(datosRegistroTodo);
+
+        DatosDimensiones datosDimensiones = new DatosDimensiones(datosRegistroTodo.datosDimensiones().dm_altura(),datosRegistroTodo.datosDimensiones().dm_ancho(),
+                datosRegistroTodo.datosDimensiones().registro_re_id());
+        Dimensiones dimensiones = dimensionesRepository.save(new Dimensiones(datosDimensiones));
+        DatosRegistroRegistro datosRegistroRegistro = new DatosRegistroRegistro(datosRegistroTodo.re_fecha(), datosRegistroTodo.proveedor_pr_id());
         Registro registro =  registroRepository.save(new Registro(datosRegistroRegistro));
-        DatosRespuestaRegistro datosRespuestaRegistro = new DatosRespuestaRegistro(registro.getRe_id(), registro.getRe_fecha(),registro.getProveedor_pr_id());
+
+        DatosRespuestaTodo datosRespuestaTodo =
+                new DatosRespuestaTodo(registro.getRe_id(),registro.getRe_fecha(),registro.getProveedor_pr_id(),datosDimensiones);
 
         URI url = uriComponentsBuilder.path("/registro/{id}").buildAndExpand(registro.getRe_id()).toUri();
-        return ResponseEntity.created(url).body(datosRespuestaRegistro);
+        return ResponseEntity.created(url).body(datosRespuestaTodo);
 
     }
 
@@ -37,6 +49,8 @@ public class RegistroController {
         return registroRepository.findAll().stream().map(DatosListadoRegistro::new).toList();
     }
 
+
+    /*
     //actualizacion de registros
     @PutMapping
     @Transactional
@@ -46,7 +60,7 @@ public class RegistroController {
         registro.actualizarDatos(datosActualizarRegistro);
 
         return ResponseEntity.ok(new DatosRespuestaRegistro(registro.getRe_id(),registro.getRe_fecha(),registro.getProveedor_pr_id()));
-    }
+    }*/
 
 
 
@@ -58,12 +72,14 @@ public class RegistroController {
         registroRepository.delete(registro);
     }
 
+    /*
     //trayendo datos de un solo registro
     @GetMapping("/{id}")
     public ResponseEntity<DatosRespuestaRegistro> retornaDatosRegistro(@PathVariable Long id){
         Registro registro = registroRepository.getReferenceById(id);
-        var datosRegistro = new DatosRespuestaRegistro(registro.getRe_id(),registro.getRe_fecha(),registro.getProveedor_pr_id());
+        var datosRegistro = new DatosRespuestaRegistro(registro.getRe_id(),registro.getRe_fecha(),registro.getProveedor_pr_id(),
+                registro.getDimensiones().getDm_altura(), registro.getDimensiones().getDm_ancho(),registro.getDimensiones().getRegistro_re_id());
         return ResponseEntity.ok(datosRegistro);
 
-    }
+    }*/
 }
