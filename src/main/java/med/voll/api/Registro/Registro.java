@@ -2,10 +2,13 @@ package med.voll.api.Registro;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import med.voll.api.Dimensiones.DatosDimensiones;
+import med.voll.api.Dimensiones.Dimensiones;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,13 +30,15 @@ public class Registro {
 
     private String re_fecha;
     private Integer proveedor_pr_id;
-<RE
+
+
 
 
 
     public Registro(DatosRegistroRegistro datosRegistroRegistro) {
         this.re_fecha = datosRegistroRegistro.re_fecha();
         this.proveedor_pr_id = datosRegistroRegistro.proveedor_pr_id();
+
 
     }
 
