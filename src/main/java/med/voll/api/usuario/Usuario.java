@@ -27,7 +27,7 @@ public class Usuario implements UserDetails {
     private Long us_id;
     private String us_nombre;
     private String us_apellido;
-    private String us_email;
+    private String email;
     private String clave;
 
     @Override
@@ -42,7 +42,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public String getUsername() {
-        return us_email;
+        return email;
     }
 
     @Override
