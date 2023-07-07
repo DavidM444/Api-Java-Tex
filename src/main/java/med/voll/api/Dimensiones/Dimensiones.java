@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 @Entity
-@Table(name = "dimension")
+@Table(name = "dimensiones")
 public class Dimensiones {
     private double dm_altura;
     private double dm_ancho;
@@ -25,6 +25,6 @@ public class Dimensiones {
         this.dm_ancho = datosDimensiones.dm_ancho();
         this.registro_re_id = datosDimensiones.registro_re_id();
     }
-    //el area se maneja con trigeers
+    //el area se maneja con trigeer
 
 }

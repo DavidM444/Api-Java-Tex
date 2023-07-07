@@ -31,11 +31,15 @@ public class RegistroController {
         System.out.println("la request llego!!!!!!");
         System.out.println(datosRegistroTodo);
 
+
+        DatosRegistroRegistro datosRegistroRegistro = new DatosRegistroRegistro(datosRegistroTodo.re_fecha(), datosRegistroTodo.proveedor_pr_id());
+        Registro registro =  registroRepository.save(new Registro(datosRegistroRegistro));
+
+
         DatosDimensiones datosDimensiones = new DatosDimensiones(datosRegistroTodo.dimensiones().dm_altura(),datosRegistroTodo.dimensiones().dm_ancho(),
                 datosRegistroTodo.dimensiones().registro_re_id());
         Dimensiones dimensiones = dimensionesRepository.save(new Dimensiones(datosDimensiones));
-        DatosRegistroRegistro datosRegistroRegistro = new DatosRegistroRegistro(datosRegistroTodo.re_fecha(), datosRegistroTodo.proveedor_pr_id());
-        Registro registro =  registroRepository.save(new Registro(datosRegistroRegistro));
+
 
         DatosRespuestaTodo datosRespuestaTodo =
                 new DatosRespuestaTodo(registro.getRe_id(),registro.getRe_fecha(),registro.getProveedor_pr_id(),datosDimensiones);
