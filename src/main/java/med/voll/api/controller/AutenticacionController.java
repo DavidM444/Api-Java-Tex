@@ -29,11 +29,8 @@ public class AutenticacionController {
     public ResponseEntity autenticarUsuario(@RequestBody @Valid DatosAutenticarUsuario datosAutenticarUsuario){
         System.out.println("llego a autenticar: "+ datosAutenticarUsuario);
         Authentication token = new UsernamePasswordAuthenticationToken(datosAutenticarUsuario.email(),datosAutenticarUsuario.clave());
-        authenticationManager.authenticate(token);
-
         var usuarioAutenticado = authenticationManager.authenticate(token);
         var jwtToken = tokenService.generarToken((Usuario) usuarioAutenticado.getPrincipal());
-        System.out.println("token generado: "+token);
         return ResponseEntity.ok(new DatosJwtoken(jwtToken));
 
     }
