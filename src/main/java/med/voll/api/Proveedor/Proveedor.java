@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+//proveedor con variabls no dbgit
 public class Proveedor {
     @Id
     private Long id;
