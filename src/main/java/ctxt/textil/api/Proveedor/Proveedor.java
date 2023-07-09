@@ -23,19 +23,16 @@ public class Proveedor {
     private String empresa;
     private Integer telefono;
     //variables a cambiar para manejo sql
-
     public Proveedor(DtoRgP dtoRgP) {
         this.nombre = dtoRgP.nombre();
         this.empresa = dtoRgP.empresa();
         this.telefono = dtoRgP.telefono();
     }
-
     public Proveedor ActualizarDatosProveedor(DatosProveedor datosProveedor){
         this.nombre = datosProveedor.nombre();
         this.empresa = datosProveedor.empresa();
         this.telefono = datosProveedor.telefono();
         return this;
     }
-
 }
 

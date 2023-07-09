@@ -18,7 +18,6 @@ public class Especificaciones {
     private String es_color;
     @Id
     private Long registro_re_id;
-
     public Especificaciones(DatosEspecificaciones datosEspecificaciones) {
         this.es_rollo = datosEspecificaciones.es_rollo();
         this.es_peso = datosEspecificaciones.es_peso();

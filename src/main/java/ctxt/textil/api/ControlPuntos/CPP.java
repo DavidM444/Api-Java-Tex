@@ -18,11 +18,9 @@ public class CPP {
     private String cp_estado;
     @Id
     private Long registro_re_id;
-
     public CPP(DatosControlPuntos datosControlPuntos) {
         this.cp_puntuacion = datosControlPuntos.cp_puntuacion();
     }
-
     public void actualizarDatos(DatosActCP datosActCPP) {
         this.cp_puntuacion = datosActCPP.cp_puntuacion();
 
