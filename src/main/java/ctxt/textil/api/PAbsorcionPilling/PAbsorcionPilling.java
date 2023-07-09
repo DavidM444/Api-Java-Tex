@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+//Tabla Pruebas de absorcion y Pilling con sus respectivos metodos
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

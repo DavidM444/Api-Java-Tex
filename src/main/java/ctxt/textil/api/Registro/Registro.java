@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
+//tabla registro con valiadcion al actualizar datos
+
 @Table(name="registros")
 @Entity(name="registro")
 

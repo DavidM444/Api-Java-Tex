@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/proveedor")
-
+//craeacion de registros en la ruta respectiva y respuesta con dto personalizado
 public class ProveedorController {
     @Autowired
     private ProveedorRpty proveedorRpty;

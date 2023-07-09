@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
+//Tabla Escala de grises con sus respectivos metodos
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

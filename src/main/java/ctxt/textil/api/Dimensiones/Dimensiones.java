@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
+//Tabla dimensiones con sus respectivos metodos
 
 @Getter
 @NoArgsConstructor
@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "dimensiones")
+
 public class Dimensiones {
     private double dm_altura;
     private double dm_ancho;

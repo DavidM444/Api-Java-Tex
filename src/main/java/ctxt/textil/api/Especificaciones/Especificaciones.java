@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
+//Tabla especificaciones con sus respectivos metodos
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

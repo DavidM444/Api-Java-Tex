@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "controlPuntos")
+//Tabla control de calidad 4 puntos con sus respectivos metodos
 public class CPP {
     private Integer cp_puntuacion;
     private String cp_estado;

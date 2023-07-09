@@ -57,12 +57,14 @@ public class RegistroController {
     @Autowired
     private EsgRepository esgRepository;
 
+
+    //Creacion de registros
     @PostMapping
     public ResponseEntity<DatosRespuestaTodo> registrarRegistro(@RequestBody @Valid DatosRegistroTodo datosRegistroTodo, UriComponentsBuilder uriComponentsBuilder){
         System.out.println("la request llego!!!!!!");
         System.out.println(datosRegistroTodo);
 
-        //creacion de registro
+        //creacion de registro en la tabla
         DatosRegistroRegistro datosRegistroRegistro = new DatosRegistroRegistro(datosRegistroTodo.re_fecha(), datosRegistroTodo.proveedor_pr_id());
         Registro registro =  registroRepository.save(new Registro(datosRegistroRegistro));
 
@@ -95,6 +97,7 @@ public class RegistroController {
 
     }
 
+    //Listado de registros
     @GetMapping
     public List<DatosListadoRegistro> listadoRegistro(){
         return registroRepository.findAll().stream().map(DatosListadoRegistro::new).toList();
