@@ -6,6 +6,5 @@ public record DatosRegistroRegistro(
         @NotBlank
         String re_fecha,
         Integer proveedor_pr_id
-
 ) {
 }
