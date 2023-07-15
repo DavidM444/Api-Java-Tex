@@ -1,5 +1,6 @@
 package ctxt.textil.api.Registro;
 
+import ctxt.textil.api.Dimensiones.Dimensiones;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ public class Registro {
     private Long re_id;
     private String re_fecha;
     private Integer proveedor_pr_id;
+
     public Registro(DatosRegistroRegistro datosRegistroRegistro) {
         this.re_fecha = datosRegistroRegistro.re_fecha();
         this.proveedor_pr_id = datosRegistroRegistro.proveedor_pr_id();
