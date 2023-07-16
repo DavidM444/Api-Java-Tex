@@ -1,3 +1,3 @@
 package ctxt.textil.api.Proveedor;
-public record DatosProveedor(String nombre, String empresa, Integer telefono) {
+public record DatosProveedor(String nombre, String empresa, Integer telefono, String direccion) {
 }

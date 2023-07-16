@@ -11,8 +11,8 @@ public record DatosRegistroTodo(@NotBlank
                                 String re_fecha,
                                 Integer proveedor_pr_id,
                                 DatosDimensiones dimensiones,
-                                DatosEspecificaciones datosEspecificaciones,
-                                DatosEscalaGrises datosEscalaGrises,
-                                DatosPAbsorcionPilling datosPAbsorcionPilling,
-                                DatosControlPuntos datosControlPuntos){
+                                DatosEspecificaciones especificaciones,
+                                DatosEscalaGrises escalagrises,
+                                DatosPAbsorcionPilling abpilling,
+                                DatosControlPuntos sispuntos){
 }

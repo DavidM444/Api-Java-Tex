@@ -61,6 +61,7 @@ public class RegistroController {
         //creacion de registro en la tabla
         DatosRegistroRegistro datosRegistroRegistro = new DatosRegistroRegistro(datosRegistroTodo.re_fecha(), datosRegistroTodo.proveedor_pr_id());
         Registro registro =  registroRepository.save(new Registro(datosRegistroRegistro));
+
         Long id = registro.getRe_id();
         System.out.println("id "+id);
 
@@ -69,12 +70,14 @@ public class RegistroController {
 
         DatosEscalaGrises datosEscalaGrises = new DatosEscalaGrises(datosRegistroTodo.escalagrises().esg_valoracion(),id);
         EscalaGrises escalaGrises = esgRepository.save(new EscalaGrises(datosEscalaGrises));
+        System.out.println(datosEscalaGrises);
 
         DatosControlPuntos datosControlPuntos = new DatosControlPuntos(datosRegistroTodo.sispuntos().cp_puntuacion(),id);
         CPP cpp = cpRepository.save(new CPP(datosControlPuntos));
 
         DatosPAbsorcionPilling datosPAbsorcionPilling = new DatosPAbsorcionPilling(datosRegistroTodo.abpilling().pa_cantidad(),
                 datosRegistroTodo.abpilling().pa_tiempo(),datosRegistroTodo.abpilling().p_rango(),id);
+        System.out.println("palakfa "+ datosPAbsorcionPilling);
         PAbsorcionPilling pAbsorcionPilling = papRepository.save( new PAbsorcionPilling(datosPAbsorcionPilling));
 
         DatosEspecificaciones datosEspecificaciones = new DatosEspecificaciones(datosRegistroTodo.especificaciones().es_rollo(),
@@ -84,7 +87,8 @@ public class RegistroController {
 
 
         DatosRespuestaTodo datosRespuestaTodo =
-                new DatosRespuestaTodo(registro.getRe_id(),registro.getRe_fecha(),registro.getProveedor_pr_id(),datosDimensiones);
+                new DatosRespuestaTodo(registro.getRe_id(),registro.getRe_fecha(),registro.getProveedor_pr_id(),datosDimensiones,
+                        datosEspecificaciones,datosEscalaGrises,datosPAbsorcionPilling,datosControlPuntos);
         URI url = uriComponentsBuilder.path("/registro/{id}").buildAndExpand(registro.getRe_id()).toUri();
         return ResponseEntity.created(url).body(datosRespuestaTodo);
     }
@@ -116,6 +120,23 @@ public class RegistroController {
     @DeleteMapping("/{id}")
     @Transactional
     public void  eliminarRegistro(@PathVariable Long id){
+
+
+        Dimensiones dimensiones = dimensionesRepository.getReferenceById(id);
+        dimensionesRepository.delete(dimensiones);
+
+        EscalaGrises escalaGrises = esgRepository.getReferenceById(id);
+        esgRepository.delete(escalaGrises);
+
+        CPP cpp = cpRepository.getReferenceById(id);
+        cpRepository.delete(cpp);
+
+        PAbsorcionPilling pAbsorcionPilling = papRepository.getReferenceById(id);
+        papRepository.delete(pAbsorcionPilling);
+
+        Especificaciones especificaciones = especificacionesRepository.getReferenceById(id);
+        especificacionesRepository.delete(especificaciones);
+
         Registro registro = registroRepository.getReferenceById(id);
         registroRepository.delete(registro);
     }

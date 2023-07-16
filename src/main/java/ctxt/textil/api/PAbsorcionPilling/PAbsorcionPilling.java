@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 @Entity
-@Table(name = "pruebaAbsorcion")
+@Table(name = "papilling")
 public class PAbsorcionPilling {
     private  double pa_cantidad;
     private double pa_tiempo;
@@ -25,6 +25,7 @@ public class PAbsorcionPilling {
         this.pa_cantidad = datosPAbsorcionPilling.pa_cantidad();
         this.pa_tiempo = datosPAbsorcionPilling.pa_tiempo();
         this.p_rango = datosPAbsorcionPilling.p_rango();
+        this.registro_re_id = datosPAbsorcionPilling.id();
     }
     public void actualizarDatos(DatosActPAP datosActPAP) {
         this.p_rango = datosActPAP.p_rango();

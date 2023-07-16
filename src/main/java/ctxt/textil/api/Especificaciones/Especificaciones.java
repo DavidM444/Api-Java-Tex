@@ -23,6 +23,7 @@ public class Especificaciones {
         this.es_peso = datosEspecificaciones.es_peso();
         this.es_tipoTela = datosEspecificaciones.es_tipoTela();
         this.es_color = datosEspecificaciones.es_color();
+        this.registro_re_id = datosEspecificaciones.id();
     }
 
     public void actualizarDatos(DatosActEspecificaciones datosActEspecificaciones) {
