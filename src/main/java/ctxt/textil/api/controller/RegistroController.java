@@ -15,7 +15,6 @@ import ctxt.textil.api.domain.Especificaciones.EspecificacionesRepository;
 import ctxt.textil.api.domain.PAbsorcionPilling.DatosPAbsorcionPilling;
 import ctxt.textil.api.domain.PAbsorcionPilling.PAPRepository;
 import ctxt.textil.api.domain.PAbsorcionPilling.PAbsorcionPilling;
-import ctxt.textil.api.Registro.*;
 import ctxt.textil.api.RespuestaTodo.DatosRegistroTodo;
 import ctxt.textil.api.RespuestaTodo.DatosRespuestaTodo;
 import ctxt.textil.api.domain.Registro.*;

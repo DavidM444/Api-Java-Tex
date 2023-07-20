@@ -19,6 +19,7 @@ public class TokenService{
     @Value("api.security.secret")
     private String apiSecret;
     public String generarToken(Usuario usuario){
+        System.out.println("api secret: "+ apiSecret);
         try {
             Algorithm algorithm = Algorithm.HMAC256(apiSecret);
             return JWT.create().
@@ -35,6 +36,7 @@ public class TokenService{
 
 
     private Instant generarExpedicionFecha() {
+        System.out.println("generando fecha");
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-05:00"));
     }
     //subject

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "escalaGrises")
+@Table(name = "escalagrises")
 public class EscalaGrises {
     private Integer esg_calificacion;
     private String esg_valoracion;
@@ -19,6 +19,8 @@ public class EscalaGrises {
     private Long registro_re_id;
     public EscalaGrises(DatosEscalaGrises datosEscalaGrises) {
         this.esg_calificacion = datosEscalaGrises.esg_valoracion();
+        this.registro_re_id = datosEscalaGrises.id();
+
     }
     public void actualizarDatos(DatosActEscg datosActEscg) {
         this.esg_calificacion = datosActEscg.esg_calificacion();
