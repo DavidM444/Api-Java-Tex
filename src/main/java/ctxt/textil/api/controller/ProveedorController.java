@@ -1,10 +1,10 @@
 package ctxt.textil.api.controller;
 
 
-import ctxt.textil.api.Proveedor.DtoResP;
-import ctxt.textil.api.Proveedor.DtoRgP;
-import ctxt.textil.api.Proveedor.Proveedor;
-import ctxt.textil.api.Proveedor.ProveedorRpty;
+import ctxt.textil.api.domain.Proveedor.DtoResP;
+import ctxt.textil.api.domain.Proveedor.DtoRgP;
+import ctxt.textil.api.domain.Proveedor.Proveedor;
+import ctxt.textil.api.domain.Proveedor.ProveedorRpty;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
