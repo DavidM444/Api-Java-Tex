@@ -1,4 +1,4 @@
-package ctxt.textil.api.infrasecurity;
+package ctxt.textil.api.infra.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
