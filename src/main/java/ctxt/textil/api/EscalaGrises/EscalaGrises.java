@@ -1,4 +1,4 @@
-package med.voll.api.EscalaGrises;
+package ctxt.textil.api.EscalaGrises;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

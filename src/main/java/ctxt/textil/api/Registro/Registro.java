@@ -7,12 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-<<<<<<< HEAD:src/main/java/med/voll/api/Registro/Registro.java
 
-
-=======
-//tabla registro con valiadcion al actualizar datos
->>>>>>> modulo-1:src/main/java/ctxt/textil/api/Registro/Registro.java
 @Table(name="registros")
 @Entity(name="registro")
 @Getter
