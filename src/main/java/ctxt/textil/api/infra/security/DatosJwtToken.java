@@ -1,4 +1,4 @@
-package ctxt.textil.api.Usuario;
+package ctxt.textil.api.infra.security;
 
-public record DatosJwtToken(String jwtTken) {
+public record DatosJwtToken(String jwtToken) {
 }

@@ -31,3 +31,4 @@ public class PAbsorcionPilling {
         this.pa_cantidad = datosActPAP.pa_cantidad();
         this.pa_tiempo = datosActPAP.pa_tiempo();
     }
+}
