@@ -13,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AndRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -24,7 +26,10 @@ public class SecurityConfigurations {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws  Exception{
         return httpSecurity.csrf().disable().sessionManagement().
                 sessionCreationPolicy(SessionCreationPolicy.STATELESS).
-                and().authorizeRequests().requestMatchers(HttpMethod.POST,"/login")
+                and().authorizeRequests().requestMatchers(
+                        new AntPathRequestMatcher("/login",HttpMethod.POST.toString()),
+                        new AntPathRequestMatcher("/signup",HttpMethod.POST.toString())
+                )
                 .permitAll()
                 .anyRequest().authenticated().and().addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
