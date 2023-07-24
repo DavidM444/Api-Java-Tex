@@ -27,7 +27,9 @@ public class Usuario implements UserDetails {
     private Long us_id;
     private String us_nombre;
     private String us_apellido;
+    @NotBlank
     private String email;
+    @NotBlank
     private String clave;
 
     public Usuario(DatosNewUser datosNewUser) {

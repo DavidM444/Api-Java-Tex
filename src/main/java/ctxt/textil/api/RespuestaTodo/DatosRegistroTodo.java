@@ -8,8 +8,8 @@ import jakarta.validation.constraints.NotBlank;
 import ctxt.textil.api.domain.Dimensiones.DatosDimensiones;
 //Objeto de datos a recibir del request o frontend
 public record DatosRegistroTodo(@NotBlank
-                                String re_fecha,
-                                Integer proveedor_pr_id,
+                                String fecha,
+                                Integer proveedor,
                                 DatosDimensiones dimensiones,
                                 DatosEspecificaciones especificaciones,
                                 DatosEscalaGrises escalagrises,
