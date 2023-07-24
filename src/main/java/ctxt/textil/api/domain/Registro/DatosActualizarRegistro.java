@@ -5,7 +5,7 @@ import ctxt.textil.api.domain.EscalaGrises.DatosActEscg;
 import ctxt.textil.api.domain.Especificaciones.DatosActEspecificaciones;
 import ctxt.textil.api.domain.PAbsorcionPilling.DatosActPAP;
 import jakarta.validation.constraints.NotNull;
-public record DatosActualizarRegistro(@NotNull Long re_id, String re_fecha, String proveedor_pr_id, DatosActDimensiones datosActDimensiones,
-                                      DatosActEspecificaciones datosActEspecificaciones,
-                                      DatosActCP datosActCPP, DatosActPAP datosActPAP, DatosActEscg datosActEscg) {
+public record DatosActualizarRegistro(@NotNull Long id, String fecha, String proveedor, DatosActDimensiones dimensiones,
+                                      DatosActEspecificaciones especificaciones,
+                                      DatosActCP sispuntos, DatosActPAP abpilling, DatosActEscg escalagrises) {
 }

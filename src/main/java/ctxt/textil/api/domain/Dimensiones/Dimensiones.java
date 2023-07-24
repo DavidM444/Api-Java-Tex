@@ -19,18 +19,17 @@ public class Dimensiones {
     private Long registro_re_id;
 
     public Dimensiones(DatosDimensiones datosDimensiones) {
-        this.dm_alto = datosDimensiones.dm_altura();
-        this.dm_ancho = datosDimensiones.dm_ancho();
-        this.registro_re_id = datosDimensiones.Registro_re_id();
+        this.dm_alto = datosDimensiones.altura();
+        this.dm_ancho = datosDimensiones.ancho();
+        this.registro_re_id = datosDimensiones.registroId();
 
     }
     public void actualizarDatos(DatosActDimensiones datosActDimensiones) {
-        if(datosActDimensiones.dm_ancho()==0.0){
-            this.dm_alto = datosActDimensiones.dm_altura();
+        if(datosActDimensiones.ancho()==0.0){
+            this.dm_alto = datosActDimensiones.altura();
         }
-        if (datosActDimensiones.dm_ancho()!=0.0){
-            this.dm_ancho = datosActDimensiones.dm_ancho();
+        if (datosActDimensiones.ancho()!=0.0){
+            this.dm_ancho = datosActDimensiones.ancho();
         }
     }
-    //el area se maneja con trigeer
 }

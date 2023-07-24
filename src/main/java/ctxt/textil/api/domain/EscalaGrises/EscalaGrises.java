@@ -18,7 +18,7 @@ public class EscalaGrises {
     @Id
     private Long registro_re_id;
     public EscalaGrises(DatosEscalaGrises datosEscalaGrises) {
-        this.esg_calificacion = datosEscalaGrises.esg_valoracion();
+        this.esg_calificacion = datosEscalaGrises.valoracion();
         this.registro_re_id = datosEscalaGrises.id();
 
     }

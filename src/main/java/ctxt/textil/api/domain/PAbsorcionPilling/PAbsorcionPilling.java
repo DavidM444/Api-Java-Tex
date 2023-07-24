@@ -21,9 +21,9 @@ public class PAbsorcionPilling {
     @Id
     private Long registro_re_id;
     public PAbsorcionPilling(DatosPAbsorcionPilling datosPAbsorcionPilling) {
-        this.pa_cantidad = datosPAbsorcionPilling.pa_cantidad();
-        this.pa_tiempo = datosPAbsorcionPilling.pa_tiempo();
-        this.p_rango = datosPAbsorcionPilling.p_rango();
+        this.pa_cantidad = datosPAbsorcionPilling.cantidad();
+        this.pa_tiempo = datosPAbsorcionPilling.tiempo();
+        this.p_rango = datosPAbsorcionPilling.rango();
         this.registro_re_id = datosPAbsorcionPilling.id();
     }
     public void actualizarDatos(DatosActPAP datosActPAP) {

@@ -19,10 +19,10 @@ public class Especificaciones {
     @Id
     private Long registro_re_id;
     public Especificaciones(DatosEspecificaciones datosEspecificaciones) {
-        this.es_rollo = datosEspecificaciones.es_rollo();
-        this.es_peso = datosEspecificaciones.es_peso();
-        this.es_tipoTela = datosEspecificaciones.es_tipoTela();
-        this.es_color = datosEspecificaciones.es_color();
+        this.es_rollo = datosEspecificaciones.rollo();
+        this.es_peso = datosEspecificaciones.peso();
+        this.es_tipoTela = datosEspecificaciones.tipoTela();
+        this.es_color = datosEspecificaciones.color();
         this.registro_re_id = datosEspecificaciones.id();
     }
 

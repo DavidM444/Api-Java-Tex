@@ -19,11 +19,11 @@ public class CPP {
     @Id
     private Long registro_re_id;
     public CPP(DatosControlPuntos datosControlPuntos) {
-        this.cp_puntuacion = datosControlPuntos.cp_puntuacion();
+        this.cp_puntuacion = datosControlPuntos.puntuacion();
         this.registro_re_id = datosControlPuntos.id();
     }
     public void actualizarDatos(DatosActCP datosActCPP) {
-        this.cp_puntuacion = datosActCPP.cp_puntuacion();
+        this.cp_puntuacion = datosActCPP.puntuacion();
 
     }
 }
