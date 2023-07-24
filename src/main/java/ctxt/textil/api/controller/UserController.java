@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-
+/*
+Registro de usuarios nuevos del sistema.
+Cuenta con generacion de codigo bycript para manejo de contraseñas de usuario.
+ */
 @RestController
 @RequestMapping("/signup")
 public class UserController {
@@ -27,20 +30,11 @@ public class UserController {
     public ResponseEntity<String> registroUser(@RequestBody  DatosNewUser datosNewUser)  {
         System.out.println(datosNewUser);
         String clave = datosNewUser.clave();
-
-        //String claveEncript = EncriptKey.Encript(clave,apiSecret);
-        //System.out.println("clave "+ clave+"     "+ "apisecret "+ apiSecret +"    mensaje: "+ claveEncript);
-
-        System.out.println("---------------");
-
-
         String claveSave = EncriptKey.BycriptKeydd(clave);
-
-        System.out.println("Hash generado: " + claveSave);
         DtoSaveUser dtoSaveUser = new DtoSaveUser(datosNewUser.nombre(), datosNewUser.apellido(), datosNewUser.email(), claveSave);
         Usuario usuario = userRepository.save(new Usuario(dtoSaveUser));
 
-        return ResponseEntity.ok("ruta disponible ss " + dtoSaveUser);
+        return ResponseEntity.ok("Registro exitoso" + dtoSaveUser);
         }
 
 

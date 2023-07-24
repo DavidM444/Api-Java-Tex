@@ -15,6 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/*
+@Autor: David Muñoz
+@Spring-API
+-- Controlador api, para logeo de usuarios a traves de autenticacion JWT.
+-- Respuesta Http con el token de usuario generado en caso de autenticacion exitosa.
+ */
 @RestController
 @RequestMapping("login")
 public class Autenticacion {

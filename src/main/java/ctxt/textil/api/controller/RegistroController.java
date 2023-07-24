@@ -59,36 +59,35 @@ public class RegistroController {
     public ResponseEntity<DatosRespuestaTodo> registrarRegistro(@RequestBody @Valid DatosRegistroTodo datosRegistroTodo, UriComponentsBuilder uriComponentsBuilder){
         System.out.println(datosRegistroTodo);
         //creacion de registro en la tabla
-        DatosRegistroRegistro datosRegistroRegistro = new DatosRegistroRegistro(datosRegistroTodo.re_fecha(), datosRegistroTodo.proveedor_pr_id());
+        DatosRegistroRegistro datosRegistroRegistro = new DatosRegistroRegistro(datosRegistroTodo.fecha(), datosRegistroTodo.proveedor());
         Registro registro =  registroRepository.save(new Registro(datosRegistroRegistro));
-
         Long id = registro.getRe_id();
-        System.out.println("id "+id);
 
-        DatosDimensiones datosDimensiones = new DatosDimensiones(datosRegistroTodo.dimensiones().dm_altura(),datosRegistroTodo.dimensiones().dm_ancho(),id);
+
+        DatosDimensiones datosDimensiones = new DatosDimensiones(datosRegistroTodo.dimensiones().altura(),datosRegistroTodo.dimensiones().ancho(),id);
         Dimensiones dimensiones = dimensionesRepository.save(new Dimensiones(datosDimensiones));
 
-        DatosEscalaGrises datosEscalaGrises = new DatosEscalaGrises(datosRegistroTodo.escalagrises().esg_valoracion(),id);
+        DatosEscalaGrises datosEscalaGrises = new DatosEscalaGrises(datosRegistroTodo.escalagrises().valoracion(),id);
         EscalaGrises escalaGrises = esgRepository.save(new EscalaGrises(datosEscalaGrises));
         System.out.println(datosEscalaGrises);
 
-        DatosControlPuntos datosControlPuntos = new DatosControlPuntos(datosRegistroTodo.sispuntos().cp_puntuacion(),id);
+        DatosControlPuntos datosControlPuntos = new DatosControlPuntos(datosRegistroTodo.sispuntos().puntuacion(),id);
         CPP cpp = cpRepository.save(new CPP(datosControlPuntos));
 
-        DatosPAbsorcionPilling datosPAbsorcionPilling = new DatosPAbsorcionPilling(datosRegistroTodo.abpilling().pa_cantidad(),
-                datosRegistroTodo.abpilling().pa_tiempo(),datosRegistroTodo.abpilling().p_rango(),id);
+        DatosPAbsorcionPilling datosPAbsorcionPilling = new DatosPAbsorcionPilling(datosRegistroTodo.abpilling().cantidad(),
+                datosRegistroTodo.abpilling().tiempo(),datosRegistroTodo.abpilling().rango(),id);
         System.out.println("palakfa "+ datosPAbsorcionPilling);
         PAbsorcionPilling pAbsorcionPilling = papRepository.save( new PAbsorcionPilling(datosPAbsorcionPilling));
 
-        DatosEspecificaciones datosEspecificaciones = new DatosEspecificaciones(datosRegistroTodo.especificaciones().es_rollo(),
-                datosRegistroTodo.especificaciones().es_peso(),datosRegistroTodo.especificaciones().es_tipoTela(),
-                datosRegistroTodo.especificaciones().es_color(),id);
+        DatosEspecificaciones datosEspecificaciones = new DatosEspecificaciones(datosRegistroTodo.especificaciones().rollo(),
+                datosRegistroTodo.especificaciones().peso(),datosRegistroTodo.especificaciones().tipoTela(),
+                datosRegistroTodo.especificaciones().color(),id);
         Especificaciones especificaciones = especificacionesRepository.save( new Especificaciones(datosEspecificaciones));
-
 
         DatosRespuestaTodo datosRespuestaTodo =
                 new DatosRespuestaTodo(registro.getRe_id(),registro.getRe_fecha(),registro.getProveedor_pr_id(),datosDimensiones,
                         datosEspecificaciones,datosEscalaGrises,datosPAbsorcionPilling,datosControlPuntos);
+
         URI url = uriComponentsBuilder.path("/registro/{id}").buildAndExpand(registro.getRe_id()).toUri();
         return ResponseEntity.created(url).body(datosRespuestaTodo);
     }
@@ -102,26 +101,29 @@ public class RegistroController {
     @Transactional
     public ResponseEntity<DatosRespuestaRegistro> actualizarRegistro(@RequestBody @Valid DatosActualizarRegistro datosActualizarRegistro){
         System.out.println(datosActualizarRegistro);
-        Registro registro = registroRepository.getReferenceById(datosActualizarRegistro.re_id());
+        Registro registro = registroRepository.getReferenceById(datosActualizarRegistro.id());
         registro.actualizarDatos(datosActualizarRegistro);
-        Dimensiones dimensiones = dimensionesRepository.getReferenceById(datosActualizarRegistro.re_id());
-        dimensiones.actualizarDatos(datosActualizarRegistro.datosActDimensiones());
-        Especificaciones especificaciones = especificacionesRepository.getReferenceById(datosActualizarRegistro.re_id());
-        especificaciones.actualizarDatos(datosActualizarRegistro.datosActEspecificaciones());
-        EscalaGrises escalaGrises = esgRepository.getReferenceById(datosActualizarRegistro.re_id());
-        escalaGrises.actualizarDatos(datosActualizarRegistro.datosActEscg());
-        CPP cpp = cpRepository.getReferenceById(datosActualizarRegistro.re_id());
-        cpp.actualizarDatos(datosActualizarRegistro.datosActCPP());
-        PAbsorcionPilling pAbsorcionPilling = papRepository.getReferenceById(datosActualizarRegistro.re_id());
-        pAbsorcionPilling.actualizarDatos(datosActualizarRegistro.datosActPAP());
+
+        Dimensiones dimensiones = dimensionesRepository.getReferenceById(datosActualizarRegistro.id());
+        dimensiones.actualizarDatos(datosActualizarRegistro.dimensiones());
+
+        Especificaciones especificaciones = especificacionesRepository.getReferenceById(datosActualizarRegistro.id());
+        especificaciones.actualizarDatos(datosActualizarRegistro.especificaciones());
+
+        EscalaGrises escalaGrises = esgRepository.getReferenceById(datosActualizarRegistro.id());
+        escalaGrises.actualizarDatos(datosActualizarRegistro.escalagrises());
+
+        CPP cpp = cpRepository.getReferenceById(datosActualizarRegistro.id());
+        cpp.actualizarDatos(datosActualizarRegistro.sispuntos());
+
+        PAbsorcionPilling pAbsorcionPilling = papRepository.getReferenceById(datosActualizarRegistro.id());
+        pAbsorcionPilling.actualizarDatos(datosActualizarRegistro.abpilling());
         return ResponseEntity.ok(new DatosRespuestaRegistro(registro.getRe_id(),registro.getRe_fecha(),registro.getProveedor_pr_id()));
     }
-    //Delete de registro de la DB. No es logico porque no se preserva el registro
+
     @DeleteMapping("/{id}")
     @Transactional
     public void  eliminarRegistro(@PathVariable Long id){
-
-
         Dimensiones dimensiones = dimensionesRepository.getReferenceById(id);
         dimensionesRepository.delete(dimensiones);
 
