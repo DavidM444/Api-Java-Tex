@@ -19,7 +19,6 @@ public class EncriptKey {
         sha256.init(secretKeySpec);
         byte[] encriptedBytes = sha256.doFinal(key.getBytes(StandardCharsets.UTF_8));
         return bytesString(encriptedBytes);
-
     }
 
     private static String bytesString(byte[] encriptedBytes) {

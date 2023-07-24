@@ -2,6 +2,7 @@ package ctxt.textil.api.controller;
 
 import ctxt.textil.api.Security.Encript.EncriptKey;
 import ctxt.textil.api.Usuario.DatosNewUser;
+import ctxt.textil.api.Usuario.DtoSaveUser;
 import ctxt.textil.api.Usuario.UserRepository;
 import ctxt.textil.api.Usuario.Usuario;
 import jakarta.validation.Valid;
@@ -23,7 +24,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<String> registroUser(@RequestBody  DatosNewUser datosNewUser) throws NoSuchAlgorithmException, InvalidKeyException {
+    public ResponseEntity<String> registroUser(@RequestBody  DatosNewUser datosNewUser)  {
         System.out.println(datosNewUser);
         String clave = datosNewUser.clave();
 
@@ -31,14 +32,16 @@ public class UserController {
         //System.out.println("clave "+ clave+"     "+ "apisecret "+ apiSecret +"    mensaje: "+ claveEncript);
 
         System.out.println("---------------");
-        // Generar el hash de la clave
+
+
         String claveSave = EncriptKey.BycriptKeydd(clave);
 
-
         System.out.println("Hash generado: " + claveSave);
+        DtoSaveUser dtoSaveUser = new DtoSaveUser(datosNewUser.nombre(), datosNewUser.apellido(), datosNewUser.email(), claveSave);
+        Usuario usuario = userRepository.save(new Usuario(dtoSaveUser));
 
-        return ResponseEntity.ok("ruta disponible ss");
+        return ResponseEntity.ok("ruta disponible ss " + dtoSaveUser);
+        }
 
-    }
 
 }
