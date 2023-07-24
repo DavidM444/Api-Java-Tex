@@ -27,8 +27,9 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var tokenRequest = request.getHeader("authorization");
+        System.out.println("token reqeuss: "+ tokenRequest);
         if (tokenRequest !=null){
-            var token = tokenRequest.replace("Bearer", "");
+            var token = tokenRequest.replace("Bearer ", "");
             var nombreUsuario = tokenService.getSubject(token);
             if (nombreUsuario!= null){
                 var usuario = userRespository.findByEmail(nombreUsuario);
@@ -36,14 +37,16 @@ public class SecurityFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(autenticacion);
             }
         }else {
+            String requestURI = request.getRequestURI();
+            System.out.println(requestURI);
+
             int res =response.getStatus();
             System.out.println(res);
             //forbbiden, solicitud correcta con restriccion.
-            response.setStatus(HttpStatus.FORBIDDEN.value());
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().write("{\"message\": \"Usuario no logueado\" ->\"Credenciales incorrectas\"}");
-            return;
-        }
-        filterChain.doFilter(request,response);
+            //response.setStatus(HttpStatus.FORBIDDEN.value());
+            //response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            //response.getWriter().write("{\"message\": \"Usuario no logueado\" ->\"Credenciales incorrectas\"}");
+            //return;
+        }filterChain.doFilter(request,response);
     }
 }

@@ -30,6 +30,16 @@ public class Usuario implements UserDetails {
     private String email;
     private String clave;
 
+    public Usuario(DatosNewUser datosNewUser) {
+    }
+
+    public Usuario(DtoSaveUser dtoSaveUser) {
+        this.us_nombre = dtoSaveUser.nombre();
+        this.us_apellido = dtoSaveUser.apellido();
+        this.email = dtoSaveUser.email();
+        this.clave = dtoSaveUser.claveHash();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
