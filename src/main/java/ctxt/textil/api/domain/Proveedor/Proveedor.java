@@ -18,23 +18,23 @@ de creacion y actualizacion de datos.
 public class Proveedor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long pr_id;
-    private String pr_nombre;
-    private String pr_empresa;
-    private String pr_direccion;
-    private Integer pr_telefono;
+    private Long prId;
+    private String prNombre;
+    private String prEmpresa;
+    private String prDireccion;
+    private Integer prTelefono;
     //variables a cambiar para manejo sql
     public Proveedor(DtoRgP dtoRgP) {
-        this.pr_nombre = dtoRgP.nombre();
-        this.pr_empresa = dtoRgP.empresa();
-        this.pr_telefono = dtoRgP.telefono();
-        this.pr_direccion = dtoRgP.direccion();
+        this.prNombre = dtoRgP.nombre();
+        this.prEmpresa = dtoRgP.empresa();
+        this.prTelefono = dtoRgP.telefono();
+        this.prDireccion = dtoRgP.direccion();
     }
     public Proveedor ActualizarDatosProveedor(DatosProveedor datosProveedor){
-        this.pr_nombre = datosProveedor.nombre();
-        this.pr_empresa = datosProveedor.empresa();
-        this.pr_telefono = datosProveedor.telefono();
-        this.pr_direccion = datosProveedor.direccion();
+        this.prNombre = datosProveedor.nombre();
+        this.prEmpresa = datosProveedor.empresa();
+        this.prTelefono = datosProveedor.telefono();
+        this.prDireccion = datosProveedor.direccion();
         return this;
     }
 }

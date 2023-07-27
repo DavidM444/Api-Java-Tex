@@ -1,6 +1,8 @@
 package ctxt.textil.api.domain.Especificaciones;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,25 +14,27 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "especificacion")
 public class Especificaciones {
-    private String es_rollo;
-    private String es_peso;
-    private String es_tipoTela;
-    private String es_color;
+    @NotBlank
+    private String esRollo;
+    private String esPeso;
+    private String esTipoTela;
+    private String esColor;
+    @NotNull
     @Id
-    private Long registro_re_id;
+    private Long registroId;
     public Especificaciones(DatosEspecificaciones datosEspecificaciones) {
-        this.es_rollo = datosEspecificaciones.rollo();
-        this.es_peso = datosEspecificaciones.peso();
-        this.es_tipoTela = datosEspecificaciones.tipoTela();
-        this.es_color = datosEspecificaciones.color();
-        this.registro_re_id = datosEspecificaciones.id();
+        this.esRollo = datosEspecificaciones.rollo();
+        this.esPeso = datosEspecificaciones.peso();
+        this.esTipoTela = datosEspecificaciones.tipoTela();
+        this.esColor = datosEspecificaciones.color();
+        this.registroId = datosEspecificaciones.id();
     }
 
     public void actualizarDatos(DatosActEspecificaciones datosActEspecificaciones) {
-        this.es_color = datosActEspecificaciones.color();
-        this.es_peso = datosActEspecificaciones.peso();
-        this.es_tipoTela = datosActEspecificaciones.tipoTela();
-        this.es_rollo = datosActEspecificaciones.rollo();
+        this.esColor = datosActEspecificaciones.color();
+        this.esPeso = datosActEspecificaciones.peso();
+        this.esTipoTela = datosActEspecificaciones.tipoTela();
+        this.esRollo = datosActEspecificaciones.rollo();
     }
 }
 

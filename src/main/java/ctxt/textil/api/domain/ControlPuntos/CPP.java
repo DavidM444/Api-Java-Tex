@@ -2,6 +2,8 @@ package ctxt.textil.api.domain.ControlPuntos;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,16 +16,17 @@ import lombok.NoArgsConstructor;
 @Table(name = "controlpuntos")
 //Tabla control de calidad 4 puntos con sus respectivos metodos
 public class CPP {
-    private Integer cp_puntuacion;
-    private String cp_estado;
+    private Integer cpPuntuacion;
+    private String cpEstado;
+    @NotNull
     @Id
-    private Long registro_re_id;
+    private Long registroId;
     public CPP(DatosControlPuntos datosControlPuntos) {
-        this.cp_puntuacion = datosControlPuntos.puntuacion();
-        this.registro_re_id = datosControlPuntos.id();
+        this.cpPuntuacion = datosControlPuntos.puntuacion();
+        this.registroId = datosControlPuntos.id();
     }
     public void actualizarDatos(DatosActCP datosActCPP) {
-        this.cp_puntuacion = datosActCPP.puntuacion();
+        this.cpPuntuacion = datosActCPP.puntuacion();
 
     }
 }

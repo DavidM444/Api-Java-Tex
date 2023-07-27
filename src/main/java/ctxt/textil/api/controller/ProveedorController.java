@@ -21,8 +21,8 @@ public class ProveedorController {
     public ResponseEntity<DtoResP> agregarProveedor(@RequestBody @Valid DtoRgP dtoRgP){
         System.out.println(dtoRgP);
         Proveedor proveedor = proveedorRpty.save(new Proveedor(dtoRgP));
-        DtoResP dtoResP = new DtoResP(proveedor.getPr_id(), proveedor.getPr_nombre(), proveedor.getPr_empresa(),
-                proveedor.getPr_telefono(), proveedor.getPr_direccion());
+        DtoResP dtoResP = new DtoResP(proveedor.getPrId(), proveedor.getPrNombre(), proveedor.getPrEmpresa(),
+                proveedor.getPrTelefono(), proveedor.getPrDireccion());
         return ResponseEntity.ok(dtoResP);
     }
 }

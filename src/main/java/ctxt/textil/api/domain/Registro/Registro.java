@@ -12,25 +12,25 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of="id")
+@EqualsAndHashCode(of="reId")
 public class Registro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long re_id;
-    private String re_fecha;
-    private Integer proveedor_pr_id;
+    private Long reId;
+    private String reFecha;
+    private Integer proveedorId;
 
     public Registro(DatosRegistroRegistro datosRegistroRegistro) {
-        this.re_fecha = datosRegistroRegistro.re_fecha();
-        this.proveedor_pr_id = datosRegistroRegistro.proveedor_pr_id();
+        this.reFecha = datosRegistroRegistro.re_fecha();
+        this.proveedorId = datosRegistroRegistro.proveedor_pr_id();
     }
     public void actualizarDatos(@Valid DatosActualizarRegistro datosActualizarRegistro) {
         System.out.println("Entro a actualizar datos---- id a string " + datosActualizarRegistro.id());
         if(datosActualizarRegistro.fecha()!=null){
-            this.re_fecha= datosActualizarRegistro.fecha();
+            this.reFecha = datosActualizarRegistro.fecha();
         }
-        if (datosActualizarRegistro.proveedor()!=null && datosActualizarRegistro.proveedor().equals(re_id.toString())){
-            this.re_id = datosActualizarRegistro.id();
+        if (datosActualizarRegistro.proveedor()!=null && datosActualizarRegistro.proveedor().equals(reId.toString())){
+            this.reId = datosActualizarRegistro.id();
         }
     }
 }

@@ -20,26 +20,26 @@ import java.util.List;
 @Getter
 @Entity
 @Table(name = "usuarios")
-@EqualsAndHashCode(of = "us_id")
+@EqualsAndHashCode(of = "usId")
 public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long us_id;
-    private String us_nombre;
-    private String us_apellido;
+    private Long usId;
+    private String usNombre;
+    private String usApellido;
     @NotBlank
-    private String email;
+    private String usEmail;
     @NotBlank
-    private String clave;
+    private String usClave;
 
     public Usuario(DatosNewUser datosNewUser) {
     }
 
     public Usuario(DtoSaveUser dtoSaveUser) {
-        this.us_nombre = dtoSaveUser.nombre();
-        this.us_apellido = dtoSaveUser.apellido();
-        this.email = dtoSaveUser.email();
-        this.clave = dtoSaveUser.claveHash();
+        this.usNombre = dtoSaveUser.nombre();
+        this.usApellido = dtoSaveUser.apellido();
+        this.usEmail = dtoSaveUser.email();
+        this.usClave = dtoSaveUser.claveHash();
     }
 
     @Override
@@ -49,12 +49,12 @@ public class Usuario implements UserDetails {
 
     @Override
     public String getPassword() {
-        return clave;
+        return usClave;
     }
 
     @Override
     public String getUsername() {
-        return email;
+        return usEmail;
     }
 
     @Override

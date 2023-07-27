@@ -38,7 +38,7 @@ El id en las demas tablas a excepcion de proveedor actua como llave foranea y pr
 * */
 @RestController
 @RequestMapping("/registro")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+
 public class RegistroController {
     //inyeccion de repositorios
     @Autowired
@@ -61,7 +61,7 @@ public class RegistroController {
         //creacion de registro en la tabla
         DatosRegistroRegistro datosRegistroRegistro = new DatosRegistroRegistro(datosRegistroTodo.fecha(), datosRegistroTodo.proveedor());
         Registro registro =  registroRepository.save(new Registro(datosRegistroRegistro));
-        Long id = registro.getRe_id();
+        Long id = registro.getReId();
 
 
         DatosDimensiones datosDimensiones = new DatosDimensiones(datosRegistroTodo.dimensiones().altura(),datosRegistroTodo.dimensiones().ancho(),id);
@@ -85,10 +85,10 @@ public class RegistroController {
         Especificaciones especificaciones = especificacionesRepository.save( new Especificaciones(datosEspecificaciones));
 
         DatosRespuestaTodo datosRespuestaTodo =
-                new DatosRespuestaTodo(registro.getRe_id(),registro.getRe_fecha(),registro.getProveedor_pr_id(),datosDimensiones,
+                new DatosRespuestaTodo(registro.getReId(),registro.getReFecha(),registro.getProveedorId(),datosDimensiones,
                         datosEspecificaciones,datosEscalaGrises,datosPAbsorcionPilling,datosControlPuntos);
 
-        URI url = uriComponentsBuilder.path("/registro/{id}").buildAndExpand(registro.getRe_id()).toUri();
+        URI url = uriComponentsBuilder.path("/registro/{id}").buildAndExpand(registro.getReId()).toUri();
         return ResponseEntity.created(url).body(datosRespuestaTodo);
     }
     //Listado de registros
@@ -118,7 +118,7 @@ public class RegistroController {
 
         PAbsorcionPilling pAbsorcionPilling = papRepository.getReferenceById(datosActualizarRegistro.id());
         pAbsorcionPilling.actualizarDatos(datosActualizarRegistro.abpilling());
-        return ResponseEntity.ok(new DatosRespuestaRegistro(registro.getRe_id(),registro.getRe_fecha(),registro.getProveedor_pr_id()));
+        return ResponseEntity.ok(new DatosRespuestaRegistro(registro.getReId(),registro.getReFecha(),registro.getProveedorId()));
     }
 
     @DeleteMapping("/{id}")
@@ -147,8 +147,8 @@ public class RegistroController {
     @GetMapping("/{id}")
     public ResponseEntity<DatosRespuestaRegistro> retornaDatosRegistro(@PathVariable Long id){
         Registro registro = registroRepository.getReferenceById(id);
-        var datosRegistro = new DatosRespuestaRegistro(registro.getRe_id(),registro.getRe_fecha(),registro.getProveedor_pr_id(),
-                registro.getDimensiones().getDm_alto(), registro.getDimensiones().getDm_ancho(),registro.getDimensiones().getRegistro_re_id());
+        var datosRegistro = new DatosRespuestaRegistro(registro.getReId(),registro.getReFecha(),registro.getProveedorId(),
+                registro.getDimensiones().getDmAlto(), registro.getDimensiones().getDmAncho(),registro.getDimensiones().getRegistroId());
         return ResponseEntity.ok(datosRegistro);
     }*/
 }

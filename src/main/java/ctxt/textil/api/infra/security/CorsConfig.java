@@ -1,4 +1,4 @@
-package ctxt.textil.api.Security;
+package ctxt.textil.api.infra.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

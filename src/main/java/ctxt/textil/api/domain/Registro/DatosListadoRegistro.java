@@ -3,7 +3,7 @@ package ctxt.textil.api.domain.Registro;
 public record DatosListadoRegistro(String fecha, Integer proveedor_pr_id) {
     //casteo y retorn de tipo Registro
     public DatosListadoRegistro(Registro registro){
-        this(registro.getRe_fecha(), registro.getProveedor_pr_id());
+        this(registro.getReFecha(), registro.getProveedorId());
     }
 }
 

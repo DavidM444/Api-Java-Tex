@@ -1,6 +1,8 @@
 package ctxt.textil.api.domain.Dimensiones;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,23 +15,24 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "dimensiones")
 public class Dimensiones {
-    private double dm_alto;
-    private double dm_ancho;
+    private double dmAlto;
+    private double dmAncho;
+    @NotNull
     @Id
-    private Long registro_re_id;
+    private Long registroId;
 
     public Dimensiones(DatosDimensiones datosDimensiones) {
-        this.dm_alto = datosDimensiones.altura();
-        this.dm_ancho = datosDimensiones.ancho();
-        this.registro_re_id = datosDimensiones.registroId();
+        this.dmAlto = datosDimensiones.altura();
+        this.dmAncho = datosDimensiones.ancho();
+        this.registroId = datosDimensiones.registroId();
 
     }
     public void actualizarDatos(DatosActDimensiones datosActDimensiones) {
         if(datosActDimensiones.ancho()==0.0){
-            this.dm_alto = datosActDimensiones.altura();
+            this.dmAlto = datosActDimensiones.altura();
         }
         if (datosActDimensiones.ancho()!=0.0){
-            this.dm_ancho = datosActDimensiones.ancho();
+            this.dmAncho = datosActDimensiones.ancho();
         }
     }
 }

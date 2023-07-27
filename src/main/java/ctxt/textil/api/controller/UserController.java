@@ -27,11 +27,12 @@ public class UserController {
     private UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<String> registroUser(@RequestBody  DatosNewUser datosNewUser)  {
+    public ResponseEntity<String> registroUser(@RequestBody @Valid DatosNewUser datosNewUser)  {
         System.out.println(datosNewUser);
         String clave = datosNewUser.clave();
         String claveSave = EncriptKey.BycriptKeydd(clave);
         DtoSaveUser dtoSaveUser = new DtoSaveUser(datosNewUser.nombre(), datosNewUser.apellido(), datosNewUser.email(), claveSave);
+        System.out.println("datos guarda: "+dtoSaveUser);
         Usuario usuario = userRepository.save(new Usuario(dtoSaveUser));
 
         return ResponseEntity.ok("Registro exitoso" + dtoSaveUser);

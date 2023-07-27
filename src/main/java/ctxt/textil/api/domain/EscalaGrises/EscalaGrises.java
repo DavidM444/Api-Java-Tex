@@ -3,6 +3,8 @@ package ctxt.textil.api.domain.EscalaGrises;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,16 +15,17 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "escalagrises")
 public class EscalaGrises {
-    private Integer esg_calificacion;
-    private String esg_valoracion;
+    private Integer esgCalificacion;
+    private String esgValoracion;
+    @NotNull
     @Id
-    private Long registro_re_id;
+    private Long registroId;
     public EscalaGrises(DatosEscalaGrises datosEscalaGrises) {
-        this.esg_calificacion = datosEscalaGrises.valoracion();
-        this.registro_re_id = datosEscalaGrises.id();
+        this.esgCalificacion = datosEscalaGrises.valoracion();
+        this.registroId = datosEscalaGrises.id();
 
     }
     public void actualizarDatos(DatosActEscg datosActEscg) {
-        this.esg_calificacion = datosActEscg.esg_calificacion();
+        this.esgCalificacion = datosActEscg.esg_calificacion();
     }
 }
