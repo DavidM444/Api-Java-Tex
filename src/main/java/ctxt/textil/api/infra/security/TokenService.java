@@ -58,5 +58,14 @@ public class TokenService{
         }
         return verifier.getSubject();
     }
+    public Integer getIdClaim(String token){
+        DecodedJWT verifier = null;
+        Algorithm algorithm = Algorithm.HMAC256(apiSecret);
+        verifier = JWT.require(algorithm)
+                .withIssuer("voll med")
+                .build()
+                .verify(token);
+        return verifier.getClaim("id").asInt();
+    }
 
 }
