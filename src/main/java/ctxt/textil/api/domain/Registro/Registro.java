@@ -19,10 +19,12 @@ public class Registro {
     private Long reId;
     private String reFecha;
     private Integer proveedorId;
+    private Long userId;
 
     public Registro(DatosRegistroRegistro datosRegistroRegistro) {
         this.reFecha = datosRegistroRegistro.re_fecha();
         this.proveedorId = datosRegistroRegistro.proveedor_pr_id();
+        this.userId = datosRegistroRegistro.userId();
     }
     public void actualizarDatos(@Valid DatosActualizarRegistro datosActualizarRegistro) {
         System.out.println("Entro a actualizar datos---- id a string " + datosActualizarRegistro.id());
