@@ -18,6 +18,7 @@ import ctxt.textil.api.domain.PAbsorcionPilling.PAbsorcionPilling;
 import ctxt.textil.api.RespuestaTodo.DatosRegistroTodo;
 import ctxt.textil.api.RespuestaTodo.DatosRespuestaTodo;
 import ctxt.textil.api.domain.Registro.*;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,10 +57,11 @@ public class RegistroController {
     //Creacion de registros
     @PostMapping
     @Transactional
-    public ResponseEntity<DatosRespuestaTodo> registrarRegistro(@RequestBody @Valid DatosRegistroTodo datosRegistroTodo, UriComponentsBuilder uriComponentsBuilder){
+    public ResponseEntity<DatosRespuestaTodo> registrarRegistro(@RequestBody @Valid DatosRegistroTodo datosRegistroTodo, HttpServletRequest request, UriComponentsBuilder uriComponentsBuilder){
         System.out.println(datosRegistroTodo);
+        Long Idcl = (Long)request.getAttribute("Idcl");
         //creacion de registro en la tabla
-        DatosRegistroRegistro datosRegistroRegistro = new DatosRegistroRegistro(datosRegistroTodo.fecha(), datosRegistroTodo.proveedor());
+        DatosRegistroRegistro datosRegistroRegistro = new DatosRegistroRegistro(datosRegistroTodo.fecha(), datosRegistroTodo.proveedor(),Idcl);
         Registro registro =  registroRepository.save(new Registro(datosRegistroRegistro));
         Long id = registro.getReId();
 
@@ -69,14 +71,13 @@ public class RegistroController {
 
         DatosEscalaGrises datosEscalaGrises = new DatosEscalaGrises(datosRegistroTodo.escalagrises().valoracion(),id);
         EscalaGrises escalaGrises = esgRepository.save(new EscalaGrises(datosEscalaGrises));
-        System.out.println(datosEscalaGrises);
 
         DatosControlPuntos datosControlPuntos = new DatosControlPuntos(datosRegistroTodo.sispuntos().puntuacion(),id);
         CPP cpp = cpRepository.save(new CPP(datosControlPuntos));
 
         DatosPAbsorcionPilling datosPAbsorcionPilling = new DatosPAbsorcionPilling(datosRegistroTodo.abpilling().cantidad(),
                 datosRegistroTodo.abpilling().tiempo(),datosRegistroTodo.abpilling().rango(),id);
-        System.out.println("palakfa "+ datosPAbsorcionPilling);
+
         PAbsorcionPilling pAbsorcionPilling = papRepository.save( new PAbsorcionPilling(datosPAbsorcionPilling));
 
         DatosEspecificaciones datosEspecificaciones = new DatosEspecificaciones(datosRegistroTodo.especificaciones().rollo(),
