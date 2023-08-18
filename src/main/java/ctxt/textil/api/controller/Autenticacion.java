@@ -32,11 +32,11 @@ public class Autenticacion {
 
     @PostMapping
     public ResponseEntity autenticarUsuario(@RequestBody @Valid DatosAutenticarUsuario datosAutenticarUsuario){
-        System.out.println("llego a autenticar: "+ datosAutenticarUsuario);
         Authentication token = new UsernamePasswordAuthenticationToken(datosAutenticarUsuario.email(),datosAutenticarUsuario.clave());
         var usuarioAutenticado = authenticationManager.authenticate(token);
         var jwtToken = tokenService.generarToken((Usuario) usuarioAutenticado.getPrincipal());
         return ResponseEntity.ok(new DatosJwtToken(jwtToken));
+
 
     }
 }

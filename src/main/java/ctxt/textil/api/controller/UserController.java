@@ -34,7 +34,6 @@ public class UserController {
         DtoSaveUser dtoSaveUser = new DtoSaveUser(datosNewUser.nombre(), datosNewUser.apellido(), datosNewUser.email(), claveSave);
         System.out.println("datos guarda: "+dtoSaveUser);
         Usuario usuario = userRepository.save(new Usuario(dtoSaveUser));
-
         return ResponseEntity.ok("Registro exitoso" + dtoSaveUser);
         }
 
