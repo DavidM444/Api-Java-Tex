@@ -1,6 +1,8 @@
 package ctxt.textil.api.controller;
 
+import ctxt.textil.api.Usuario.DataUser;
 import ctxt.textil.api.Usuario.DatosAutenticarUsuario;
+import ctxt.textil.api.Usuario.UserRepository;
 import ctxt.textil.api.Usuario.Usuario;
 import ctxt.textil.api.infra.security.DatosJwtToken;
 import ctxt.textil.api.infra.security.TokenService;
@@ -22,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 -- Respuesta Http con el token de usuario generado en caso de autenticacion exitosa.
  */
 @RestController
-@RequestMapping("login")
+@RequestMapping("/login")
 public class Autenticacion {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -30,13 +32,24 @@ public class Autenticacion {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private UserRepository userRepository;
+
+
+
     @PostMapping
-    public ResponseEntity autenticarUsuario(@RequestBody @Valid DatosAutenticarUsuario datosAutenticarUsuario){
+    public ResponseEntity<DataUser> autenticarUsuario(@RequestBody @Valid DatosAutenticarUsuario datosAutenticarUsuario){
+        System.out.println("autenticacion: "+datosAutenticarUsuario);
         Authentication token = new UsernamePasswordAuthenticationToken(datosAutenticarUsuario.email(),datosAutenticarUsuario.clave());
         var usuarioAutenticado = authenticationManager.authenticate(token);
         var jwtToken = tokenService.generarToken((Usuario) usuarioAutenticado.getPrincipal());
-        return ResponseEntity.ok(new DatosJwtToken(jwtToken));
+        Integer userId = tokenService.getIdClaim(jwtToken);
+        System.out.println("token: "+jwtToken + "id: "+userId);
+        Usuario user = userRepository.findByUsId(userId);
+
+        DataUser data = new DataUser(user.getUsNombre(), user.getUsApellido(), user.getUsEmail(), jwtToken);
 
 
+        return ResponseEntity.ok(data);
     }
 }
