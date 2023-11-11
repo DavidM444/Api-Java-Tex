@@ -59,11 +59,15 @@ public class RegistroController {
     @Transactional
     public ResponseEntity<DatosRespuestaTodo> registrarRegistro(@RequestBody @Valid DatosRegistroTodo datosRegistroTodo, HttpServletRequest request, UriComponentsBuilder uriComponentsBuilder){
         System.out.println(datosRegistroTodo);
-        Long Idcl = (Long)request.getAttribute("Idcl");
+        Object Idclatt = request.getAttribute("Idcl");
+        Long Idcl = ((Integer) Idclatt).longValue();
+        System.out.println("Idcl "+Idcl);
+
         //creacion de registro en la tabla
         DatosRegistroRegistro datosRegistroRegistro = new DatosRegistroRegistro(datosRegistroTodo.fecha(), datosRegistroTodo.proveedor(),Idcl);
         Registro registro =  registroRepository.save(new Registro(datosRegistroRegistro));
         Long id = registro.getReId();
+        System.out.println("registro: "+registro.getReFecha() + " id "+id);
 
 
         DatosDimensiones datosDimensiones = new DatosDimensiones(datosRegistroTodo.dimensiones().altura(),datosRegistroTodo.dimensiones().ancho(),id);
