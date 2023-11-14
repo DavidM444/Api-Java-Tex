@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloController {
     @GetMapping()
     public String Hello(){
-        return "ruta hello en funcionamiento \n" +
+        return "Hello Docker \n" +
                 "Retorno en prueba";
     }
 }

@@ -1,10 +1,7 @@
 package ctxt.textil.api.controller;
 
 import ctxt.textil.api.Security.Encript.EncriptKey;
-import ctxt.textil.api.Usuario.DatosNewUser;
-import ctxt.textil.api.Usuario.DtoSaveUser;
-import ctxt.textil.api.Usuario.UserRepository;
-import ctxt.textil.api.Usuario.Usuario;
+import ctxt.textil.api.Usuario.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,8 +31,6 @@ public class UserController {
         DtoSaveUser dtoSaveUser = new DtoSaveUser(datosNewUser.nombre(), datosNewUser.apellido(), datosNewUser.email(), claveSave);
         System.out.println("datos guarda: "+dtoSaveUser);
         Usuario usuario = userRepository.save(new Usuario(dtoSaveUser));
-        return ResponseEntity.ok("Registro exitoso" + dtoSaveUser);
-        }
-
-
+        return ResponseEntity.ok("Registro exitoso");
+    }
 }
