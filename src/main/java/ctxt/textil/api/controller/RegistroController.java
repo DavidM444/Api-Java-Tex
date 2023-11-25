@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
+import java.util.stream.Collectors;
 import java.net.URI;
 import java.util.List;
 /*
@@ -97,9 +97,42 @@ public class RegistroController {
         return ResponseEntity.created(url).body(datosRespuestaTodo);
     }
     //Listado de registros
+
+    /*
     @GetMapping
     public List<DatosListadoRegistro> listadoRegistro(){
         return registroRepository.findAll().stream().map(DatosListadoRegistro::new).toList();
+    }
+
+     */
+
+    //Actualizacion de peticion get donde se se retorna el listado de todos los registros que se encuentran orgnaizdos por su id, las consultas son ejecutadas y se relacionan
+    //por id y se mapean a un solo objeto para visualizarse
+    @GetMapping
+    public List<DatosRespuestaTodo> listadoRegistro(){
+        List<Registro> registros = registroRepository.findAll();
+        System.out.println("registros: "+ registros);
+        return registros.stream()
+                .map(registro ->{
+                    Long id = registro.getReId();
+                    Dimensiones dimensiones = dimensionesRepository.getReferenceById(id);
+                    Especificaciones especificaciones = especificacionesRepository.getReferenceById(id);
+                    EscalaGrises escalaid = esgRepository.getReferenceById(id);
+                    CPP cpid = cpRepository.getReferenceById(id);
+                    PAbsorcionPilling  papillingid =  papRepository.getReferenceById(id);
+
+                    return new DatosRespuestaTodo(
+                            id,registro.getReFecha(),registro.getProveedorId(),
+                           new DatosDimensiones(dimensiones.getDmAlto(),dimensiones.getDmAncho(),dimensiones.getRegistroId()),
+                            new DatosEspecificaciones(especificaciones.getEsRollo(),especificaciones.getEsPeso(),especificaciones.getEsTipoTela(),especificaciones.getEsColor(),especificaciones.getRegistroId()),
+                            new DatosEscalaGrises(escalaid.getEsgCalificacion(), escalaid.getRegistroId()),
+                            new DatosPAbsorcionPilling(papillingid.getPaCantidad(),papillingid.getPaTiempo(),papillingid.getPRango(),papillingid.getRegistroId()),
+                            new DatosControlPuntos(cpid.getCpPuntuacion(), cpid.getRegistroId())
+                    );
+
+                }).toList();
+
+
     }
     //actualizacion de registros
     @PutMapping
