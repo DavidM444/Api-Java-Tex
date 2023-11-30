@@ -26,6 +26,6 @@ public class EscalaGrises {
 
     }
     public void actualizarDatos(DatosActEscg datosActEscg) {
-        this.esgCalificacion = datosActEscg.esg_calificacion();
+        this.esgCalificacion = datosActEscg.calificacion();
     }
 }
