@@ -29,8 +29,8 @@ public class PAbsorcionPilling {
         this.registroId = datosPAbsorcionPilling.id();
     }
     public void actualizarDatos(DatosActPAP datosActPAP) {
-        this.pRango = datosActPAP.p_rango();
-        this.paCantidad = datosActPAP.pa_cantidad();
-        this.paTiempo = datosActPAP.pa_tiempo();
+        this.pRango = datosActPAP.rango();
+        this.paCantidad = datosActPAP.cantidad();
+        this.paTiempo = datosActPAP.tiempo();
     }
 }
