@@ -1,6 +1,7 @@
 package ctxt.textil.api.controller;
 
 
+import ctxt.textil.api.domain.PAbsorcionPilling.DatosProvName;
 import ctxt.textil.api.domain.Proveedor.DtoResP;
 import ctxt.textil.api.domain.Proveedor.DtoRgP;
 import ctxt.textil.api.domain.Proveedor.Proveedor;
@@ -9,6 +10,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.w3c.dom.stylesheets.LinkStyle;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/proveedor")
@@ -24,5 +28,13 @@ public class ProveedorController {
         DtoResP dtoResP = new DtoResP(proveedor.getPrId(), proveedor.getPrNombre(), proveedor.getPrEmpresa(),
                 proveedor.getPrTelefono(), proveedor.getPrDireccion());
         return ResponseEntity.ok(dtoResP);
+    };
+    public List<DatosProvName> listadoProveedores(){
+        List<Proveedor> proveedores = proveedorRpty.findAll();
+        return proveedores.stream().map(
+                proveedor -> {
+                    return new  DatosProvName(proveedor.getPrNombre());
+                }
+        ).toList();
     }
 }
