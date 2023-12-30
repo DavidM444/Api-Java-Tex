@@ -31,7 +31,7 @@ public class ProveedorController {
         List<Proveedor> proveedores = proveedorRpty.findAll();
         return proveedores.stream().map(
                 proveedor -> {
-                    return new  DatosProvName(proveedor.getPrNombre());
+                    return new  DatosProvName(proveedor.getPrNombre(),proveedor.getPrId());
                 }
         ).toList();
     }
