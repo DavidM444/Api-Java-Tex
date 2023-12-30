@@ -1,22 +1,20 @@
 package ctxt.textil.api.controller;
 
-import ctxt.textil.api.domain.ControlPuntos.CPP;
-import ctxt.textil.api.domain.ControlPuntos.CPRepository;
-import ctxt.textil.api.domain.ControlPuntos.DatosControlPuntos;
+import ctxt.textil.api.domain.ControlPuntos.*;
+import ctxt.textil.api.domain.Dimensiones.DatosActDimensiones;
 import ctxt.textil.api.domain.Dimensiones.DatosDimensiones;
 import ctxt.textil.api.domain.Dimensiones.Dimensiones;
 import ctxt.textil.api.domain.Dimensiones.DimensionesRepository;
-import ctxt.textil.api.domain.EscalaGrises.DatosEscalaGrises;
-import ctxt.textil.api.domain.EscalaGrises.EscalaGrises;
-import ctxt.textil.api.domain.EscalaGrises.EsgRepository;
+import ctxt.textil.api.domain.EscalaGrises.*;
+import ctxt.textil.api.domain.Especificaciones.DatosActEspecificaciones;
 import ctxt.textil.api.domain.Especificaciones.DatosEspecificaciones;
 import ctxt.textil.api.domain.Especificaciones.Especificaciones;
 import ctxt.textil.api.domain.Especificaciones.EspecificacionesRepository;
-import ctxt.textil.api.domain.PAbsorcionPilling.DatosPAbsorcionPilling;
-import ctxt.textil.api.domain.PAbsorcionPilling.PAPRepository;
-import ctxt.textil.api.domain.PAbsorcionPilling.PAbsorcionPilling;
+import ctxt.textil.api.domain.PAbsorcionPilling.*;
 import ctxt.textil.api.RespuestaTodo.DatosRegistroTodo;
 import ctxt.textil.api.RespuestaTodo.DatosRespuestaTodo;
+import ctxt.textil.api.domain.Proveedor.Proveedor;
+import ctxt.textil.api.domain.Proveedor.ProveedorRpty;
 import ctxt.textil.api.domain.Registro.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -25,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-import java.util.stream.Collectors;
+
 import java.net.URI;
 import java.util.List;
 /*
@@ -52,12 +50,14 @@ public class RegistroController {
     private CPRepository cpRepository;
     @Autowired
     private PAPRepository papRepository;
+    //Creacion de registros
     @Autowired
     private EsgRepository esgRepository;
-    //Creacion de registros
+    @Autowired
+    private ProveedorRpty prov;
     @PostMapping
     @Transactional
-    public ResponseEntity<DatosRespuestaTodo> registrarRegistro(@RequestBody @Valid DatosRegistroTodo datosRegistroTodo, HttpServletRequest request, UriComponentsBuilder uriComponentsBuilder){
+    public ResponseEntity<String> registrarRegistro(@RequestBody @Valid DatosRegistroTodo datosRegistroTodo, HttpServletRequest request, UriComponentsBuilder uriComponentsBuilder){
         System.out.println(datosRegistroTodo);
         Object Idclatt = request.getAttribute("Idcl");
         Long Idcl = ((Integer) Idclatt).longValue();
@@ -68,7 +68,6 @@ public class RegistroController {
         Registro registro =  registroRepository.save(new Registro(datosRegistroRegistro));
         Long id = registro.getReId();
         System.out.println("registro: "+registro.getReFecha() + " id "+id);
-
 
         DatosDimensiones datosDimensiones = new DatosDimensiones(datosRegistroTodo.dimensiones().altura(),datosRegistroTodo.dimensiones().ancho(),id);
         Dimensiones dimensiones = dimensionesRepository.save(new Dimensiones(datosDimensiones));
@@ -89,12 +88,9 @@ public class RegistroController {
                 datosRegistroTodo.especificaciones().color(),id);
         Especificaciones especificaciones = especificacionesRepository.save( new Especificaciones(datosEspecificaciones));
 
-        DatosRespuestaTodo datosRespuestaTodo =
-                new DatosRespuestaTodo(registro.getReId(),registro.getReFecha(),registro.getProveedorId(),datosDimensiones,
-                        datosEspecificaciones,datosEscalaGrises,datosPAbsorcionPilling,datosControlPuntos);
 
         URI url = uriComponentsBuilder.path("/registro/{id}").buildAndExpand(registro.getReId()).toUri();
-        return ResponseEntity.created(url).body(datosRespuestaTodo);
+        return ResponseEntity.created(url).body("Registro Creado Exitosamente");
     }
     //Listado de registros
 
@@ -114,25 +110,27 @@ public class RegistroController {
         System.out.println("registros: "+ registros);
         return registros.stream()
                 .map(registro ->{
+
                     Long id = registro.getReId();
                     Dimensiones dimensiones = dimensionesRepository.getReferenceById(id);
                     Especificaciones especificaciones = especificacionesRepository.getReferenceById(id);
                     EscalaGrises escalaid = esgRepository.getReferenceById(id);
                     CPP cpid = cpRepository.getReferenceById(id);
                     PAbsorcionPilling  papillingid =  papRepository.getReferenceById(id);
+                    Long proveedor = registro.getUserId();
+                    Proveedor proveedor1 = prov.getReferenceById(proveedor);
+
 
                     return new DatosRespuestaTodo(
-                            id,registro.getReFecha(),registro.getProveedorId(),
-                           new DatosDimensiones(dimensiones.getDmAlto(),dimensiones.getDmAncho(),dimensiones.getRegistroId()),
-                            new DatosEspecificaciones(especificaciones.getEsRollo(),especificaciones.getEsPeso(),especificaciones.getEsTipoTela(),especificaciones.getEsColor(),especificaciones.getRegistroId()),
-                            new DatosEscalaGrises(escalaid.getEsgCalificacion(), escalaid.getRegistroId()),
-                            new DatosPAbsorcionPilling(papillingid.getPaCantidad(),papillingid.getPaTiempo(),papillingid.getPRango(),papillingid.getRegistroId()),
-                            new DatosControlPuntos(cpid.getCpPuntuacion(), cpid.getRegistroId())
+                            id,registro.getReFecha(),proveedor1.getPrNombre(),proveedor1.getPrEmpresa(),
+                            new DatosActDimensiones(dimensiones.getDmAlto(),dimensiones.getDmAncho()),
+                            new DatosActEspecificaciones(especificaciones.getEsRollo(),especificaciones.getEsPeso(),especificaciones.getEsColor(),especificaciones.getEsTipoTela()),
+                            new DatosList(escalaid.getEsgValoracion()),
+                            new DatosActPAP(papillingid.getPaCantidad(),papillingid.getPaTiempo(),papillingid.getPRango()),
+                            new DatosActCP(cpid.getCpPuntuacion())
                     );
 
                 }).toList();
-
-
     }
     //actualizacion de registros
     @PutMapping
@@ -156,7 +154,7 @@ public class RegistroController {
 
         PAbsorcionPilling pAbsorcionPilling = papRepository.getReferenceById(datosActualizarRegistro.id());
         pAbsorcionPilling.actualizarDatos(datosActualizarRegistro.abpilling());
-        return ResponseEntity.ok(new DatosRespuestaRegistro(registro.getReId(),registro.getReFecha(),registro.getProveedorId()));
+        return ResponseEntity.ok(new DatosRespuestaRegistro("Registro Actualizado",registro.getReId(),registro.getReFecha()));
     }
 
     @DeleteMapping("/{id}")
