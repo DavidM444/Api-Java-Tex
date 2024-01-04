@@ -6,10 +6,7 @@ import ctxt.textil.api.domain.Dimensiones.DatosDimensiones;
 import ctxt.textil.api.domain.Dimensiones.Dimensiones;
 import ctxt.textil.api.domain.Dimensiones.DimensionesRepository;
 import ctxt.textil.api.domain.EscalaGrises.*;
-import ctxt.textil.api.domain.Especificaciones.DatosActEspecificaciones;
-import ctxt.textil.api.domain.Especificaciones.DatosEspecificaciones;
-import ctxt.textil.api.domain.Especificaciones.Especificaciones;
-import ctxt.textil.api.domain.Especificaciones.EspecificacionesRepository;
+import ctxt.textil.api.domain.Especificaciones.*;
 import ctxt.textil.api.domain.PAbsorcionPilling.*;
 import ctxt.textil.api.RespuestaTodo.DatosRegistroTodo;
 import ctxt.textil.api.RespuestaTodo.DatosRespuestaTodo;
@@ -187,4 +184,18 @@ public class RegistroController {
                 registro.getDimensiones().getDmAlto(), registro.getDimensiones().getDmAncho(),registro.getDimensiones().getRegistroId());
         return ResponseEntity.ok(datosRegistro);
     }*/
+
+    //Datos info Database
+
+   @GetMapping("/datos")
+    public ResponseEntity<DtoInfo> dataInfoRegistros(){
+       Integer datosBajos = esgRepository.countByEsgValoracion("Bajo");
+       Integer datosModerados = esgRepository.countByEsgValoracion("Moderada");
+       Integer datosAltos = esgRepository.countByEsgValoracion("Alta");
+       Integer datosExcelentes = esgRepository.countByEsgValoracion("Excelente");
+
+
+       System.out.println("intento de datos Bajos "+ datosAltos);
+       return ResponseEntity.ok(new DtoInfo(datosBajos,datosModerados,datosAltos,datosExcelentes));
+    }
 }
