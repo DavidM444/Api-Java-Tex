@@ -33,7 +33,6 @@ public class SecurityFilter extends OncePerRequestFilter {
             var token = tokenRequest.replace("Bearer ", "");
             var nombreUsuario = tokenService.getSubject(token);
             Integer Id = tokenService.getIdClaim(token);
-            System.out.println("token "+token +" id "+ Id);
             request.setAttribute("Idcl",Id);
             if (nombreUsuario!= null){
                 var usuario = userRespository.findByUsEmail(nombreUsuario);
@@ -47,19 +46,8 @@ public class SecurityFilter extends OncePerRequestFilter {
 
             int res =response.getStatus();
             System.out.println(res);
-
-            //forbbiden, solicitud correcta con restriccion.
-            //response.setStatus(HttpStatus.FORBIDDEN.value());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             System.out.println("escribiendo error");
-            //response.getWriter().write("{\"message\": \"Inicio de sesión fallido :( \"}");
-            System.out.println("error escrito");
-            //return;
-
-
-
-
-        System.out.println("mandando request dofilteer");
         filterChain.doFilter(request,response);
     }
 }
