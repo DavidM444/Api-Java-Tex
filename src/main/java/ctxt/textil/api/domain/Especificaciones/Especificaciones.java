@@ -27,7 +27,7 @@ public class Especificaciones {
         this.esPeso = datosEspecificaciones.peso();
         this.esTipoTela = datosEspecificaciones.tipoTela();
         this.esColor = datosEspecificaciones.color();
-        this.registroId = datosEspecificaciones.id();
+        this.registroId = datosEspecificaciones.registroId();
     }
 
     public void actualizarDatos(DatosActEspecificaciones datosActEspecificaciones) {

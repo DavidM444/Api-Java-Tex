@@ -23,7 +23,7 @@ public class CPP {
     private Long registroId;
     public CPP(DatosControlPuntos datosControlPuntos) {
         this.cpPuntuacion = datosControlPuntos.puntuacion();
-        this.registroId = datosControlPuntos.id();
+        this.registroId = datosControlPuntos.registroId();
     }
     public void actualizarDatos(DatosActCP datosActCPP) {
         this.cpPuntuacion = datosActCPP.puntuacion();

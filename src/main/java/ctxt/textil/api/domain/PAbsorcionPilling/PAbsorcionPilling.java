@@ -26,7 +26,7 @@ public class PAbsorcionPilling {
         this.paCantidad = datosPAbsorcionPilling.cantidad();
         this.paTiempo = datosPAbsorcionPilling.tiempo();
         this.pRango = datosPAbsorcionPilling.rango();
-        this.registroId = datosPAbsorcionPilling.id();
+        this.registroId = datosPAbsorcionPilling.registroId();
     }
     public void actualizarDatos(DatosActPAP datosActPAP) {
         this.pRango = datosActPAP.rango();

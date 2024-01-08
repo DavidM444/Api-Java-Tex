@@ -3,7 +3,6 @@ package ctxt.textil.api.domain.EscalaGrises;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +21,7 @@ public class EscalaGrises {
     private Long registroId;
     public EscalaGrises(DatosEscalaGrises datosEscalaGrises) {
         this.esgCalificacion = datosEscalaGrises.valoracion();
-        this.registroId = datosEscalaGrises.id();
+        this.registroId = datosEscalaGrises.registroId();
 
     }
     public void actualizarDatos(DatosActEscg datosActEscg) {
