@@ -4,7 +4,6 @@ import ctxt.textil.api.Usuario.DataUser;
 import ctxt.textil.api.Usuario.DatosAutenticarUsuario;
 import ctxt.textil.api.Usuario.UserRepository;
 import ctxt.textil.api.Usuario.Usuario;
-import ctxt.textil.api.infra.security.DatosJwtToken;
 import ctxt.textil.api.infra.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +34,6 @@ public class Autenticacion {
     @Autowired
     private UserRepository userRepository;
 
-
-
     @PostMapping
     public ResponseEntity<DataUser> autenticarUsuario(@RequestBody @Valid DatosAutenticarUsuario datosAutenticarUsuario){
         System.out.println("autenticacion: "+datosAutenticarUsuario);
@@ -48,8 +45,6 @@ public class Autenticacion {
         Usuario user = userRepository.findByUsId(userId);
 
         DataUser data = new DataUser(user.getUsNombre(), user.getUsApellido(), user.getUsEmail(), jwtToken);
-
-
         return ResponseEntity.ok(data);
     }
 }

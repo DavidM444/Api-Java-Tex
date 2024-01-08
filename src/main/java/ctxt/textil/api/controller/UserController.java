@@ -6,11 +6,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 /*
 Registro de usuarios nuevos del sistema.
 Cuenta con generacion de codigo bycript para manejo de contraseñas de usuario.

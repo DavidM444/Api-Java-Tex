@@ -55,10 +55,8 @@ public class RegistroController {
     @PostMapping
     @Transactional
     public ResponseEntity<String> registrarRegistro(@RequestBody @Valid DatosRegistroTodo datosRegistroTodo, HttpServletRequest request, UriComponentsBuilder uriComponentsBuilder){
-        System.out.println(datosRegistroTodo);
         Object Idclatt = request.getAttribute("Idcl");
         Long Idcl = ((Integer) Idclatt).longValue();
-        System.out.println("Idcl "+Idcl);
 
         //creacion de registro en la tabla
         DatosRegistroRegistro datosRegistroRegistro = new DatosRegistroRegistro(datosRegistroTodo.fecha(), datosRegistroTodo.proveedor(),Idcl);
@@ -89,22 +87,12 @@ public class RegistroController {
         URI url = uriComponentsBuilder.path("/registro/{id}").buildAndExpand(registro.getReId()).toUri();
         return ResponseEntity.created(url).body("Registro Creado Exitosamente");
     }
-    //Listado de registros
 
-    /*
-    @GetMapping
-    public List<DatosListadoRegistro> listadoRegistro(){
-        return registroRepository.findAll().stream().map(DatosListadoRegistro::new).toList();
-    }
-
-     */
-
-    //Actualizacion de peticion get donde se se retorna el listado de todos los registros que se encuentran orgnaizdos por su id, las consultas son ejecutadas y se relacionan
-    //por id y se mapean a un solo objeto para visualizarse
+    /* Actualizacion de peticion get donde se se retorna el listado de todos los registros que se encuentran orgnaizdos por su id, las consultas son ejecutadas y se relacionan
+    por id y se mapean a un solo objeto para visualizarse. */
     @GetMapping
     public List<DatosRespuestaTodo> listadoRegistro(){
         List<Registro> registros = registroRepository.findAll();
-        System.out.println("registros: "+ registros);
         return registros.stream()
                 .map(registro ->{
 
@@ -129,11 +117,10 @@ public class RegistroController {
 
                 }).toList();
     }
-    //actualizacion de registros
+    // Actualizacion de registros
     @PutMapping
     @Transactional
     public ResponseEntity<DatosRespuestaRegistro> actualizarRegistro(@RequestBody @Valid DatosActualizarRegistro datosActualizarRegistro){
-        System.out.println(datosActualizarRegistro);
         Registro registro = registroRepository.getReferenceById(datosActualizarRegistro.id());
         registro.actualizarDatos(datosActualizarRegistro);
 
@@ -184,7 +171,6 @@ public class RegistroController {
                 registro.getDimensiones().getDmAlto(), registro.getDimensiones().getDmAncho(),registro.getDimensiones().getRegistroId());
         return ResponseEntity.ok(datosRegistro);
     }*/
-
     //Datos info Database
 
    @GetMapping("/datos")
@@ -194,8 +180,13 @@ public class RegistroController {
        Integer datosAltos = esgRepository.countByEsgValoracion("Alta");
        Integer datosExcelentes = esgRepository.countByEsgValoracion("Excelente");
 
+       Integer cambioSevero = papRepository.countBypConsideracion("Cambio Severo");
+       Integer cambioConsiderable = papRepository.countBypConsideracion("Cambio Considerable");
+       Integer formacionPilling = papRepository.countBypConsideracion("Formacion Pilling");
+       Integer pilling = papRepository.countBypConsideracion("Pilling");
+       Integer noHayPilling = papRepository.countBypConsideracion("No Hay Pilling");
 
-       System.out.println("intento de datos Bajos "+ datosAltos);
-       return ResponseEntity.ok(new DtoInfo(datosBajos,datosModerados,datosAltos,datosExcelentes));
+       return ResponseEntity.ok(new DtoInfo(datosBajos,datosModerados,datosAltos,datosExcelentes,
+               cambioSevero,cambioConsiderable,formacionPilling,pilling,noHayPilling));
     }
 }
