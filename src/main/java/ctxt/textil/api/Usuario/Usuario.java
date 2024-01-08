@@ -30,7 +30,6 @@ public class Usuario implements UserDetails {
     private String usEmail;
     @NotBlank
     private String usClave;
-
     public Usuario(DatosNewUser datosNewUser) {
     }
 
