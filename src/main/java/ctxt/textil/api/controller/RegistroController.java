@@ -88,8 +88,10 @@ public class RegistroController {
         return ResponseEntity.created(url).body("Registro Creado Exitosamente");
     }
 
-    /* Actualizacion de peticion get donde se se retorna el listado de todos los registros que se encuentran orgnaizdos por su id, las consultas son ejecutadas y se relacionan
-    por id y se mapean a un solo objeto para visualizarse. */
+    /*
+        * Actualizacion de peticion get donde se se retorna el listado de todos los registros que se encuentran orgnaizdos por su id, las consultas son ejecutadas y se relacionan
+        * por id y se mapean a un solo objeto para visualizarse.
+    */
     @GetMapping
     public List<DatosRespuestaTodo> listadoRegistro(){
         List<Registro> registros = registroRepository.findAll();
@@ -140,7 +142,6 @@ public class RegistroController {
         pAbsorcionPilling.actualizarDatos(datosActualizarRegistro.abpilling());
         return ResponseEntity.ok(new DatosRespuestaRegistro("Registro Actualizado",registro.getReId(),registro.getReFecha()));
     }
-
     @DeleteMapping("/{id}")
     @Transactional
     public void  eliminarRegistro(@PathVariable Long id){

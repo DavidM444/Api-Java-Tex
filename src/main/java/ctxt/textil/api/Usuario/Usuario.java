@@ -33,11 +33,11 @@ public class Usuario implements UserDetails {
     public Usuario(DatosNewUser datosNewUser) {
     }
 
-    public Usuario(DtoSaveUser dtoSaveUser) {
-        this.usNombre = dtoSaveUser.nombre();
-        this.usApellido = dtoSaveUser.apellido();
-        this.usEmail = dtoSaveUser.email();
-        this.usClave = dtoSaveUser.claveHash();
+    public Usuario(DataUser dataUser) {
+        this.usNombre = dataUser.nombre();
+        this.usApellido = dataUser.apellido();
+        this.usEmail = dataUser.email();
+        this.usClave = dataUser.clave();
     }
 
     @Override

@@ -22,7 +22,6 @@ public class EscalaGrises {
     public EscalaGrises(DatosEscalaGrises datosEscalaGrises) {
         this.esgCalificacion = datosEscalaGrises.valoracion();
         this.registroId = datosEscalaGrises.registroId();
-
     }
     public void actualizarDatos(DatosActEscg datosActEscg) {
         this.esgCalificacion = datosActEscg.calificacion();

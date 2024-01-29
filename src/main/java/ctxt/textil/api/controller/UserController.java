@@ -25,9 +25,9 @@ public class UserController {
         System.out.println(datosNewUser);
         String clave = datosNewUser.clave();
         String claveSave = EncriptKey.BycriptKeydd(clave);
-        DtoSaveUser dtoSaveUser = new DtoSaveUser(datosNewUser.nombre(), datosNewUser.apellido(), datosNewUser.email(), claveSave);
-        System.out.println("datos guarda: "+dtoSaveUser);
-        Usuario usuario = userRepository.save(new Usuario(dtoSaveUser));
+        DataUser dataUser = new DataUser(datosNewUser.nombre(), datosNewUser.apellido(), datosNewUser.email(), claveSave);
+        System.out.println("datos guarda: "+dataUser);
+        Usuario usuario = userRepository.save(new Usuario(dataUser));
         return ResponseEntity.ok("Registro exitoso");
     }
 }

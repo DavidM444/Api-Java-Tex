@@ -1,7 +1,11 @@
 package ctxt.textil.api.infra.errores;
 
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -11,7 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLIntegrityConstraintViolationException;
 
-//clase para tratar errores a nivel de entidades y no a  nivel de medicos
+
 @RestControllerAdvice
 public class TratarErrores {
 
@@ -23,10 +27,7 @@ public class TratarErrores {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     //para dar respuestas de los errores recibimos como parametro  la excepcion
     public ResponseEntity tratarError400 (MethodArgumentNotValidException e){
-
         var errores = e.getFieldErrors().stream().map(DatosErrorDto::new).toList();
-
-
         return ResponseEntity.badRequest().body(errores);
     }
     @ExceptionHandler({SQLIntegrityConstraintViolationException.class,NoSuchAlgorithmException.class})
@@ -38,6 +39,7 @@ public class TratarErrores {
 
 
 
+
     //creacion del dto de error
     public  record DatosErrorDto(String campo, String error){
         //creando constructor, donde se crea campo de la lista de errores que tenemos
@@ -45,6 +47,20 @@ public class TratarErrores {
             this(error.getField(), error.getDefaultMessage());
         }
 
+    }
+
+    //constraint key violation
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<String> constrainError(ConstraintViolationException error){
+        System.out.println("error "+ error.getConstraintViolations() +" mesage " +error.getSuppressed());
+
+        return new ResponseEntity<>("El objeto a insertar no se encuentra identificado", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<String> autorizacionExpired(){
+        System.out.println("error de token vencido ");
+        return new ResponseEntity<>("Peticion no realizada. Token Expirado", HttpStatusCode.valueOf(403));
     }
 
 

@@ -27,6 +27,5 @@ public class CPP {
     }
     public void actualizarDatos(DatosActCP datosActCPP) {
         this.cpPuntuacion = datosActCPP.puntuacion();
-
     }
 }
