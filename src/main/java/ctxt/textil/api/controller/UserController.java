@@ -4,6 +4,9 @@ import ctxt.textil.api.Security.Encript.EncriptKey;
 import ctxt.textil.api.UserAdmin.UserAdmin;
 import ctxt.textil.api.UserAdmin.UserAdminRepository;
 import ctxt.textil.api.Usuario.*;
+import ctxt.textil.api.Usuario.Roles.DtoRol;
+import ctxt.textil.api.Usuario.Roles.Rol;
+import ctxt.textil.api.Usuario.Roles.RolRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +28,11 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private UserAdminRepository userAdminRepository;
+    @Autowired
+    private RolRepository repositoryRol;
 
     private final static String RoleUser = "ROLE_USER";
-    private final static String RoleAdmin = "ROLE_USER";
+    private final static String RoleAdmin = "ROLE_ADMIN";
 
     @PostMapping
     public ResponseEntity<String> registroUser(@RequestBody @Valid DatosNewUser datosNewUser)  {
@@ -37,19 +42,36 @@ public class UserController {
         DataUser dataUser = new DataUser(datosNewUser.nombre(), datosNewUser.apellido(), datosNewUser.email(), claveSave);
         System.out.println("datos guarda: "+dataUser);
         Usuario usuario = userRepository.save(new Usuario(dataUser));
-
+        saveAuthorities(new DtoRol(usuario.getUsId(),usuario.getAuthorities().toString()));
         return ResponseEntity.ok("Registro exitoso");
     }
 
     @Transactional
     @PostMapping("/admin")
-    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> registroUserAdmin(@RequestBody @Valid DatosNewUser dtUser){
         String clave = EncriptKey.BycriptKeydd(dtUser.clave());
         DataUser dataUser = new DataUser(dtUser.nombre(),dtUser.apellido(), dtUser.email(),clave);
 
         UserAdmin usuario = userAdminRepository.save(new UserAdmin(dataUser));
+        System.out.println("antes de guardar autorities: user "+dataUser);
+        saveAuthorities(new DtoRol( (usuario.getAdId()),usuario.getAuthorities().toString()));
         System.out.println("dta: "+dtUser+ " role: "+usuario.getAuthorities());
         return ResponseEntity.ok("Usuario administrador creado");
+    }
+
+    private void saveAuthorities(DtoRol rol) {
+        try {
+            Boolean validacion = verifyAutorityAdmin(rol.rolName());
+        } catch (Exception e) {
+            throw new RuntimeException("Rol invalido: "+e.getMessage());
+        }
+        Rol rolData = new Rol(rol);
+        System.out.println("rol data a gurardar: "+rolData);
+        repositoryRol.save(rolData);
+
+    }
+
+    private Boolean verifyAutorityAdmin(String rolAutority) {
+        return rolAutority.equals(RoleAdmin);
     }
 }
