@@ -5,7 +5,9 @@ import ctxt.textil.api.Usuario.Usuario;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,9 +15,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Entity
 @AllArgsConstructor
+@Getter
+@Entity
 @Table(name = "admin")
+@EqualsAndHashCode(of = "adId")
 public class UserAdmin implements UserDetails {
 
     @Id
@@ -33,7 +37,14 @@ public class UserAdmin implements UserDetails {
         this.adEmail = dataUser.email();
         this.adClave = dataUser.clave();
     }
+    public UserAdmin() {}
+    public String getAdEmail() {
+        return adEmail;
+    }
 
+    public Long getAdId() {
+        return adId;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -47,17 +58,18 @@ public class UserAdmin implements UserDetails {
 
     @Override
     public String getUsername() {
-        return adNombre;
+        return adEmail;
     }
+
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
