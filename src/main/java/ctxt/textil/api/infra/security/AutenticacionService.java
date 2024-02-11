@@ -29,13 +29,18 @@ public class AutenticacionService implements UserDetailsService {
                 user = userRep.findByAdEmail(username);
             }
         }catch (Exception ex){
-            System.out.println("!!!!!!!!Excepcion!!!!!!!!!!!!!!!!!!" + ex.getMessage());
+            System.out.println("!Excepcion!" + ex.getMessage());
             throw new RuntimeException(ex);
 
         }
         Boolean d = user == null;
-        System.out.println("antes de retornar user "+user.getUsername()+" bool "+d);
         return user;
     }
 
+    public UserDetails findUserWithIss(Boolean isUserAdmin, String emailUser) {
+        if(isUserAdmin){
+            return userRep.findByAdEmail(emailUser);
+        }
+        return userRepository.findByUsEmail(emailUser);
+    }
 }

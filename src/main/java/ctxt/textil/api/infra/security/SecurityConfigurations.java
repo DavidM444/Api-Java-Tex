@@ -9,10 +9,8 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,10 +22,12 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfigurations  {
+public class SecurityConfigurations {
 
     @Autowired
     private  SecurityFilter securityFilter;
+
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws  Exception{
@@ -36,16 +36,18 @@ public class SecurityConfigurations  {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth.requestMatchers(
                         new AntPathRequestMatcher("/login",HttpMethod.POST.toString()),
-                        new AntPathRequestMatcher("/signup",HttpMethod.POST.toString())
+                        new AntPathRequestMatcher("/signup",HttpMethod.POST.toString()),
+                        new AntPathRequestMatcher("/admin",HttpMethod.POST.toString())
                 ).permitAll())
                 .authorizeHttpRequests(auth1 -> auth1.requestMatchers(
-                        new AntPathRequestMatcher("/singup/admin",HttpMethod.POST.toString()))
+                        new AntPathRequestMatcher("/signup/admin",HttpMethod.GET.toString()))
                         .hasRole("ADMIN").anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        System.out.println("entrando en el autentication mananger " +authenticationConfiguration.getAuthenticationManager().toString());
         return authenticationConfiguration.getAuthenticationManager();
     }
 
@@ -53,4 +55,8 @@ public class SecurityConfigurations  {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
+
+
 }

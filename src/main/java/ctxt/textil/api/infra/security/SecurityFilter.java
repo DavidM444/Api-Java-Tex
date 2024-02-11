@@ -17,7 +17,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-public class SecurityFilter extends OncePerRequestFilter {
+public class SecurityFilter extends OncePerRequestFilter{
+
+    @Autowired
+    AutenticacionService autenticacionService;
 
     @Autowired
     private TokenService tokenService;
@@ -28,20 +31,37 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var tokenRequest = request.getHeader("authorization");
+        String requestURI = request.getRequestURI();
+
+        //tara para mañana: en lugar de establece el uri con la url, se establbece con es iss ya qye es diferente para cada token. Y
+        // asi llamar metodos necesarios como getSubjetct , o para consultar por respostiries y eso.
+        //Terminar la autenticacion para que pueda hacer consultas como admin.
         System.out.println("token reqeuss: "+ tokenRequest);
         if (tokenRequest !=null){
             var token = tokenRequest.replace("Bearer ", "");
-            var nombreUsuario = tokenService.getSubject(token);
-            Integer Id = tokenService.getIdClaim(token);
-            request.setAttribute("Idcl",Id);
-            if (nombreUsuario!= null){
-                var usuario = userRespository.findByUsEmail(nombreUsuario);
+            String iss = tokenService.getIssClaim(token, requestURI);
+            Boolean uri = iss.equals("qualityAdmin");
+            System.out.println("uri "+uri +" path "+requestURI);
+
+
+
+
+            if(iss.equals("qualityUser")){
+                Integer Id = tokenService.getIdClaim(token);
+                request.setAttribute("Idcl",Id);
+            }
+
+            var emailUser = tokenService.getSubject(token,uri);
+            if (emailUser!= null){
+
+                var usuario = autenticacionService.findUserWithIss(uri, emailUser);
+
                 var autenticacion = new UsernamePasswordAuthenticationToken(usuario,null,usuario.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(autenticacion);
 
             }
         }
-            String requestURI = request.getRequestURI();
+
             System.out.println(requestURI);
 
             int res =response.getStatus();
