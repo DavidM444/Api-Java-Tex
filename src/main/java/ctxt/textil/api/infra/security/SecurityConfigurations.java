@@ -1,6 +1,7 @@
 package ctxt.textil.api.infra.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.AntPathRequestMatcherProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -40,7 +41,8 @@ public class SecurityConfigurations {
                         new AntPathRequestMatcher("/admin",HttpMethod.POST.toString())
                 ).permitAll())
                 .authorizeHttpRequests(auth1 -> auth1.requestMatchers(
-                        new AntPathRequestMatcher("/signup/admin",HttpMethod.GET.toString()))
+                        new AntPathRequestMatcher("/signup/admin",HttpMethod.POST.toString()),
+                                new AntPathRequestMatcher("/admin", HttpMethod.GET.toString()))
                         .hasRole("ADMIN").anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
