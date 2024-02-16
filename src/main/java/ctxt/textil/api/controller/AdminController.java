@@ -3,6 +3,8 @@ package ctxt.textil.api.controller;
 import ctxt.textil.api.UserAdmin.UserAdmin;
 import ctxt.textil.api.UserAdmin.UserAdminRepository;
 import ctxt.textil.api.Usuario.DatosAutenticarUsuario;
+import ctxt.textil.api.Usuario.UserRepository;
+import ctxt.textil.api.Usuario.Usuario;
 import ctxt.textil.api.infra.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import java.util.LinkedList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -26,6 +27,9 @@ public class AdminController {
     private TokenService tokenService;
     @Autowired
     private UserAdminRepository userRep;
+
+    @Autowired
+    private UserRepository userRepo;
 
 
     @PostMapping
@@ -46,4 +50,10 @@ public class AdminController {
         */
         return ResponseEntity.ok("User Admin Logeado");
     }
+    @GetMapping
+    public LinkedList<UserList> getUsers(){
+        List<UserList> lista2 = userRepo.findAll().stream().map(UserList::new).toList();
+        return new LinkedList<>(lista2);
+    }
+    protected record UserList(Usuario usuario){}
 }
