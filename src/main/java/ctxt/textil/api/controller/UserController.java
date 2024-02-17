@@ -40,7 +40,6 @@ public class UserController {
         String clave = datosNewUser.clave();
         String claveSave = EncriptKey.BycriptKeydd(clave);
         DataUser dataUser = new DataUser(datosNewUser.nombre(), datosNewUser.apellido(), datosNewUser.email(), claveSave);
-        System.out.println("datos guarda: "+dataUser);
         Usuario usuario = userRepository.save(new Usuario(dataUser));
         saveAuthorities(new DtoRol(usuario.getUsId(),usuario.getAuthorities().toString()));
         return ResponseEntity.ok("Registro exitoso");
@@ -51,16 +50,14 @@ public class UserController {
     public ResponseEntity<String> registroUserAdmin(@RequestBody @Valid DatosNewUser dtUser){
         String clave = EncriptKey.BycriptKeydd(dtUser.clave());
         DataUser dataUser = new DataUser(dtUser.nombre(),dtUser.apellido(), dtUser.email(),clave);
-
         UserAdmin usuario = userAdminRepository.save(new UserAdmin(dataUser));
-        System.out.println("antes de guardar autorities: user "+dataUser);
         saveAuthorities(new DtoRol( (usuario.getAdId()),usuario.getAuthorities().toString()));
-        System.out.println("dta: "+dtUser+ " role: "+usuario.getAuthorities());
         return ResponseEntity.ok("Usuario administrador creado");
     }
 
     private void saveAuthorities(DtoRol rol) {
         try {
+            System.out.println("verificando rol"+rol);
             Boolean validacion = verifyAutorityAdmin(rol.rolName());
         } catch (Exception e) {
             throw new RuntimeException("Rol invalido: "+e.getMessage());
