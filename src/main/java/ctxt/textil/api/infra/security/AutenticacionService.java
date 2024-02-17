@@ -21,26 +21,19 @@ public class AutenticacionService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         System.out.println("autenticando user: "+username);
-        UserDetails user;
-        user = userRepository.findByUsEmail(username);
+        UserDetails user = userRepository.findByUsEmail(username);
         try {
             if (user==null){
-                System.out.println("entrando en user null "+username);
                 user = userRep.findByAdEmail(username);
             }
         }catch (Exception ex){
-            System.out.println("!Excepcion!" + ex.getMessage());
             throw new RuntimeException(ex);
-
         }
-        Boolean d = user == null;
         return user;
     }
 
     public UserDetails findUserWithIss(Boolean isUserAdmin, String emailUser) {
-        if(isUserAdmin){
-            return userRep.findByAdEmail(emailUser);
-        }
+        if(isUserAdmin) return userRep.findByAdEmail(emailUser);
         return userRepository.findByUsEmail(emailUser);
     }
 }

@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
@@ -27,8 +28,6 @@ public class SecurityConfigurations {
 
     @Autowired
     private  SecurityFilter securityFilter;
-
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws  Exception{
@@ -49,14 +48,15 @@ public class SecurityConfigurations {
     }
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        System.out.println("entrando en el autentication mananger " +authenticationConfiguration.getAuthenticationManager().toString());
         return authenticationConfiguration.getAuthenticationManager();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 
 
 
