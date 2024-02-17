@@ -27,7 +27,6 @@ public class TokenService{
     @Value("api.security.admin")
     private String apiAdmin;
     public String generarToken(Usuario usuario){
-        System.out.println("api secret: "+ apiSecret);
         try {
             Algorithm algorithm = Algorithm.HMAC256(apiSecret);
             return JWT.create().
@@ -42,7 +41,6 @@ public class TokenService{
     }
 
     public String generarAdminToken(UserAdmin userAdmin){
-        System.out.println("generadno token admin "+userAdmin.toString());
         Algorithm alg = Algorithm.HMAC256(apiAdmin);
         try {
             return JWT.create().withIssuer("qualityAdmin").withSubject(userAdmin.getAdEmail()).
@@ -53,10 +51,7 @@ public class TokenService{
         }
     }
 
-
-
     private Instant generarExpedicionFecha() {
-        System.out.println("generando fecha");
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-05:00"));
     }
     //subject
@@ -74,7 +69,7 @@ public class TokenService{
             throw  new RuntimeException(exception.toString());
         }
         if (verifier.getSubject()==null){
-            throw  new RuntimeException("verifier es nulo");
+            throw  new RuntimeException("Verifier nulo.");
         }
         return verifier.getSubject();
     }
@@ -85,10 +80,8 @@ public class TokenService{
                 .withIssuer("qualityUser")
                 .build()
                 .verify(token);
-
         //change "id" to "us_id"
         return verifier.getClaim("us_id").asInt();
-
     }
 
     protected Integer getIdClaimAdmin(String token){
@@ -98,13 +91,11 @@ public class TokenService{
                 .withIssuer("qualitytex")
                 .build()
                 .verify(token);
-
-        //change "id" to "us_id"
         return verifier.getClaim("ad_id").asInt();
 
     }
     protected String getIssClaim(String token, String url){
-        Boolean uri = url.equals("/signup/admin");
+        Boolean uri = url.equals("/admin");
         usoAlgorithm(uri);
         DecodedJWT verifier = null;
         verifier = JWT.require(algorithm2)
@@ -123,9 +114,5 @@ public class TokenService{
             algorithm2=Algorithm.HMAC256(apiSecret);
             Issuer = "qualityUser";
         }
-
     }
-
-
-
 }
