@@ -22,16 +22,19 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
-/*
-Creacion de controlador de registro, para peticiones post,get,put,delete
-donde se realiza crud de registros. La eliminacion de registros se realiza a traves de id de requst.
-Cuando se crea un registro se llama a los demas repository de las demas tablas para realizar la insercion de los demas
-datos de la request(DatosRegistroTodo), lo mismo para actualizarlos, se toman en cuenta las demas tablas.
+import java.util.Map;
 
-El id en las demas tablas a excepcion de proveedor actua como llave foranea y primaria de estas, haciendo referencia a la creacion
- de un unico objeto de esa clase por registro creado.
-* */
+/**
+ * Creacion de controlador de registro, para peticiones post,get,put,delete
+ * donde se realiza crud de registros. La eliminacion de registros se realiza a traves de id de requst.
+ * Cuando se crea un registro se llama a los demas repository de las demas tablas para realizar la insercion de los demas
+ * datos de la request(DatosRegistroTodo), lo mismo para actualizarlos, se toman en cuenta las demas tablas.
+ *
+ * El id en las demas tablas a excepcion de proveedor actua como llave foranea y primaria de estas, haciendo referencia a la creacion
+ * de un unico objeto de esa clase por registro creado.
+ * */
 @RestController
 @RequestMapping("/registro")
 
@@ -57,6 +60,7 @@ public class RegistroController {
     public ResponseEntity<String> registrarRegistro(@RequestBody @Valid DatosRegistroTodo datosRegistroTodo, HttpServletRequest request, UriComponentsBuilder uriComponentsBuilder){
         Object Idclatt = request.getAttribute("Idcl");
         Long Idcl = ((Integer) Idclatt).longValue();
+        System.out.println("idcl "+Idcl + "id del prveedor: "+ datosRegistroTodo.proveedor());
 
         //creacion de registro en la tabla
         DatosRegistroRegistro datosRegistroRegistro = new DatosRegistroRegistro(datosRegistroTodo.fecha(), datosRegistroTodo.proveedor(),Idcl);
@@ -88,9 +92,9 @@ public class RegistroController {
         return ResponseEntity.created(url).body("Registro Creado Exitosamente");
     }
 
-    /*
-        * Actualizacion de peticion get donde se se retorna el listado de todos los registros que se encuentran orgnaizdos por su id, las consultas son ejecutadas y se relacionan
-        * por id y se mapean a un solo objeto para visualizarse.
+    /**
+     * Actualizacion de peticion get donde se se retorna el listado de todos los registros que se encuentran orgnaizdos por su id, las consultas son ejecutadas y se relacionan
+     * por id y se mapean a un solo objeto para visualizarse.
     */
     @GetMapping
     public List<DatosRespuestaTodo> listadoRegistro(){
@@ -99,12 +103,14 @@ public class RegistroController {
                 .map(registro ->{
 
                     Long id = registro.getReId();
+                    System.out.println("id de registro :" + id);
                     Dimensiones dimensiones = dimensionesRepository.getReferenceById(id);
                     Especificaciones especificaciones = especificacionesRepository.getReferenceById(id);
                     EscalaGrises escalaid = esgRepository.getReferenceById(id);
                     CPP cpid = cpRepository.getReferenceById(id);
                     PAbsorcionPilling  papillingid =  papRepository.getReferenceById(id);
-                    Long proveedor = registro.getUserId();
+                    Long proveedor = registro.getProveedorId().longValue();
+                    System.out.println("proveedor id "+proveedor);
                     Proveedor proveedor1 = prov.getReferenceById(proveedor);
 
 
@@ -112,7 +118,7 @@ public class RegistroController {
                             id,registro.getReFecha(),proveedor1.getPrNombre(),proveedor1.getPrEmpresa(),
                             new DatosActDimensiones(dimensiones.getDmAlto(),dimensiones.getDmAncho()),
                             new DatosActEspecificaciones(especificaciones.getEsRollo(),especificaciones.getEsPeso(),especificaciones.getEsColor(),especificaciones.getEsTipoTela()),
-                            new DatosList(escalaid.getEsgValoracion()),
+                            new DatosList(escalaid.getEsgValoracion(),escalaid.getEsgCalificacion()),
                             new DatosActPAP(papillingid.getPaCantidad(),papillingid.getPaTiempo(),papillingid.getPRango()),
                             new DatosActCP(cpid.getCpPuntuacion())
                     );
@@ -186,7 +192,6 @@ public class RegistroController {
        Integer formacionPilling = papRepository.countBypConsideracion("Formacion Pilling");
        Integer pilling = papRepository.countBypConsideracion("Pilling");
        Integer noHayPilling = papRepository.countBypConsideracion("No Hay Pilling");
-
        return ResponseEntity.ok(new DtoInfo(datosBajos,datosModerados,datosAltos,datosExcelentes,
                cambioSevero,cambioConsiderable,formacionPilling,pilling,noHayPilling));
     }
