@@ -31,8 +31,11 @@ public class Registro {
         if(datosActualizarRegistro.fecha()!=null){
             this.reFecha = datosActualizarRegistro.fecha();
         }
-        if (datosActualizarRegistro.proveedor()!=null && datosActualizarRegistro.proveedor().equals(reId.toString())){
-            this.reId = datosActualizarRegistro.id();
+        if (datosActualizarRegistro.proveedor()!=null){
+            //not update id
+            //this.reId = datosActualizarRegistro.id();
+            //updating proveedor
+            this.proveedorId = datosActualizarRegistro.proveedor();
         }
     }
 }
