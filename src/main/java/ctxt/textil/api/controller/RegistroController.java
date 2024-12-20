@@ -115,7 +115,7 @@ public class RegistroController {
 
 
                     return new DatosRespuestaTodo(
-                            id,registro.getReFecha(),proveedor1.getPrNombre(),proveedor1.getPrEmpresa(),
+                            id,registro.getReFecha(),proveedor1.getPrNombre(),proveedor1.getPrId(),proveedor1.getPrEmpresa(),
                             new DatosActDimensiones(dimensiones.getDmAlto(),dimensiones.getDmAncho()),
                             new DatosActEspecificaciones(especificaciones.getEsRollo(),especificaciones.getEsPeso(),especificaciones.getEsColor(),especificaciones.getEsTipoTela()),
                             new DatosList(escalaid.getEsgValoracion(),escalaid.getEsgCalificacion()),
@@ -146,6 +146,7 @@ public class RegistroController {
 
         PAbsorcionPilling pAbsorcionPilling = papRepository.getReferenceById(datosActualizarRegistro.id());
         pAbsorcionPilling.actualizarDatos(datosActualizarRegistro.abpilling());
+
         return ResponseEntity.ok(new DatosRespuestaRegistro("Registro Actualizado",registro.getReId(),registro.getReFecha()));
     }
     @DeleteMapping("/{id}")
@@ -194,5 +195,27 @@ public class RegistroController {
        Integer noHayPilling = papRepository.countBypConsideracion("No Hay Pilling");
        return ResponseEntity.ok(new DtoInfo(datosBajos,datosModerados,datosAltos,datosExcelentes,
                cambioSevero,cambioConsiderable,formacionPilling,pilling,noHayPilling));
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DatosRespuestaTodo> registroId(@PathVariable("id") Long idParam){
+       Registro registro = registroRepository.getReferenceById(idParam);
+        Dimensiones dimensiones = dimensionesRepository.getReferenceById(idParam);
+        Especificaciones especificaciones = especificacionesRepository.getReferenceById(idParam);
+        EscalaGrises escalaid = esgRepository.getReferenceById(idParam);
+        CPP cpid = cpRepository.getReferenceById(idParam);
+        PAbsorcionPilling  papillingid =  papRepository.getReferenceById(idParam);
+        Proveedor proveedor1 = prov.getReferenceById(registro.getProveedorId().longValue());
+
+
+        return ResponseEntity.ok(new DatosRespuestaTodo(
+                registro.getReId(), registro.getReFecha(),proveedor1.getPrNombre(),proveedor1.getPrId(),proveedor1.getPrEmpresa(),
+                new DatosActDimensiones(dimensiones.getDmAlto(),dimensiones.getDmAncho()),
+                new DatosActEspecificaciones(especificaciones.getEsRollo(),especificaciones.getEsPeso(),especificaciones.getEsColor(),especificaciones.getEsTipoTela()),
+                new DatosList(escalaid.getEsgValoracion(),escalaid.getEsgCalificacion()),
+                new DatosActPAP(papillingid.getPaCantidad(),papillingid.getPaTiempo(),papillingid.getPRango()),
+                new DatosActCP(cpid.getCpPuntuacion())
+        ));
     }
 }
