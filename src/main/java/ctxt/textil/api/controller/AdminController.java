@@ -6,6 +6,7 @@ import ctxt.textil.api.Usuario.DatosAutenticarUsuario;
 import ctxt.textil.api.Usuario.UserRepository;
 import ctxt.textil.api.Usuario.Usuario;
 import ctxt.textil.api.infra.security.TokenService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,14 +32,13 @@ public class AdminController {
     @Autowired
     private UserRepository userRepo;
 
-
+    @Transactional
     @PostMapping
     public ResponseEntity<String> autenticarAdmin(@RequestBody @Valid DatosAutenticarUsuario datosAdmin){
         System.out.println("datos usuario admin: "+datosAdmin);
         Authentication auth = new UsernamePasswordAuthenticationToken(datosAdmin.email(),datosAdmin.clave());
         System.out.println("auth "+auth);
         var authenticationResult = authenticationManager.authenticate(auth);
-
 
         System.out.println("user "+authenticationResult.toString()+ " ->auth: "+auth);
         var jwtToken = tokenService.generarAdminToken((UserAdmin) authenticationResult.getPrincipal());
@@ -52,8 +52,9 @@ public class AdminController {
     }
     @GetMapping
     public LinkedList<UserList> getUsers(){
-        List<UserList> lista2 = userRepo.findAll().stream().map(UserList::new).toList();
+        List<UserList> lista2 = userRepo.findAll().stream().map(
+                user-> new UserList(user.getUsId(),user.getUsNombre(),user.getUsApellido(), user.getUsEmail())).toList();
         return new LinkedList<>(lista2);
     }
-    protected record UserList(Usuario usuario){}
+    protected record UserList(Long id,String nombre, String apellido, String email){}
 }
