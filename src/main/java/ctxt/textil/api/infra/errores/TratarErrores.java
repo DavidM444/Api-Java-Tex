@@ -40,9 +40,6 @@ public class TratarErrores {
     }
 
 
-
-
-
     //creacion del dto de error
     public  record DatosErrorDto(String campo, String error){
         //creando constructor, donde se crea campo de la lista de errores que tenemos

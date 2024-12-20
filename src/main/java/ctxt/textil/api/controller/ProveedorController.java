@@ -11,9 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+/**
+ *  Creaciòn de registros en la ruta respectiva y respuesta con dto personalizado
+ * */
+
 @RestController
 @RequestMapping("/proveedor")
-//craeacion de registros en la ruta respectiva y respuesta con dto personalizado
 public class ProveedorController {
     @Autowired
     private ProveedorRpty proveedorRpty;
@@ -30,9 +33,7 @@ public class ProveedorController {
     public List<DatosProvName> listadoProveedores(){
         List<Proveedor> proveedores = proveedorRpty.findAll();
         return proveedores.stream().map(
-                proveedor -> {
-                    return new  DatosProvName(proveedor.getPrNombre(),proveedor.getPrId());
-                }
+                proveedor -> new  DatosProvName(proveedor.getPrNombre(),proveedor.getPrId())
         ).toList();
     }
 }

@@ -37,7 +37,7 @@ public class SecurityFilter extends OncePerRequestFilter{
     protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var tokenRequest = request.getHeader("authorization");
         String requestURI = request.getRequestURI();
-        System.out.println("token request: "+ tokenRequest);
+        System.out.println("token request: "+ tokenRequest + " uri "+requestURI);
         if (tokenRequest !=null){
             var token = tokenRequest.replace("Bearer ", "");
             String iss = tokenService.getIssClaim(token, requestURI);

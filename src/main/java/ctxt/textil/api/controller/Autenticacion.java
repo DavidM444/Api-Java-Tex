@@ -1,9 +1,4 @@
 package ctxt.textil.api.controller;
-
-import ctxt.textil.api.Security.Encript.EncriptKey;
-
-import ctxt.textil.api.UserAdmin.UserAdmin;
-import ctxt.textil.api.UserAdmin.UserAdminRepository;
 import ctxt.textil.api.Usuario.DataUser;
 import ctxt.textil.api.Usuario.DatosAutenticarUsuario;
 import ctxt.textil.api.Usuario.UserRepository;
@@ -56,7 +51,4 @@ public class Autenticacion {
         DataUser data = new DataUser(user.getUsNombre(), user.getUsApellido(), user.getUsEmail(), jwtToken);
         return ResponseEntity.ok(data);
     }
-
-
-
 }

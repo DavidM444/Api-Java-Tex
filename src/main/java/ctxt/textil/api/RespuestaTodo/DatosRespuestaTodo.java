@@ -7,10 +7,17 @@ import ctxt.textil.api.domain.Especificaciones.DatosActEspecificaciones;
 import ctxt.textil.api.domain.PAbsorcionPilling.DatosActPAP;
 
 //Record para la respuesta de del ResponseEntity en las peticiones
-public record DatosRespuestaTodo(Long id, String fecha, String proveedor, String empresa,
-                                 DatosActDimensiones datosDimensiones,
-                                 DatosActEspecificaciones especificaciones,
-                                 DatosList escalagrises,
-                                 DatosActPAP abpilling,
-                                 DatosActCP sispuntos) {
-}
+public record DatosRespuestaTodo(
+        Long id,
+        String fecha,
+        String nombreProveedor,
+        Long proveedor,
+        String empresa,
+         DatosActDimensiones dimensiones,
+         DatosActEspecificaciones especificaciones,
+         DatosList escalagrises,
+         DatosActPAP abpilling,
+         DatosActCP sispuntos) {
+};
+
+

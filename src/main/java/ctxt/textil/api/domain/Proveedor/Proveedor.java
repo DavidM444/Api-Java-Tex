@@ -30,6 +30,8 @@ public class Proveedor {
         this.prTelefono = dtoRgP.telefono();
         this.prDireccion = dtoRgP.direccion();
     }
+
+    //only method for admins, they may edit the data proveedor
     public Proveedor ActualizarDatosProveedor(DatosProveedor datosProveedor){
         this.prNombre = datosProveedor.nombre();
         this.prEmpresa = datosProveedor.empresa();
