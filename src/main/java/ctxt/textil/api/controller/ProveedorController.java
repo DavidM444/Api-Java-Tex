@@ -1,10 +1,7 @@
 package ctxt.textil.api.controller;
 
 import ctxt.textil.api.domain.PAbsorcionPilling.DatosProvName;
-import ctxt.textil.api.domain.Proveedor.DtoResP;
-import ctxt.textil.api.domain.Proveedor.DtoRgP;
-import ctxt.textil.api.domain.Proveedor.Proveedor;
-import ctxt.textil.api.domain.Proveedor.ProveedorRpty;
+import ctxt.textil.api.domain.Proveedor.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +19,7 @@ public class ProveedorController {
     private ProveedorRpty proveedorRpty;
 
     @PostMapping
-    public ResponseEntity<DtoResP> agregarProveedor(@RequestBody @Valid DtoRgP dtoRgP){
+    public ResponseEntity<DtoResP> agregarProveedor(@RequestBody @Valid DatosProveedor dtoRgP){
         System.out.println(dtoRgP);
         Proveedor proveedor = proveedorRpty.save(new Proveedor(dtoRgP));
         DtoResP dtoResP = new DtoResP(proveedor.getPrId(), proveedor.getPrNombre(), proveedor.getPrEmpresa(),

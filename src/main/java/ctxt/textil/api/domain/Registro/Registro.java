@@ -2,6 +2,8 @@ package ctxt.textil.api.domain.Registro;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -21,10 +23,10 @@ public class Registro {
     private Integer proveedorId;
     private Long userId;
 
-    public Registro(DatosRegistroRegistro datosRegistroRegistro) {
-        this.reFecha = datosRegistroRegistro.re_fecha();
-        this.proveedorId = datosRegistroRegistro.proveedor_pr_id();
-        this.userId = datosRegistroRegistro.userId();
+    public Registro(@NotBlank  String reFecha, Integer proveedorId,@NotNull Long userId) {
+        this.reFecha = reFecha;
+        this.proveedorId =proveedorId;
+        this.userId = userId;
     }
     public void actualizarDatos(@Valid DatosActualizarRegistro datosActualizarRegistro) {
         System.out.println("Entro a actualizar datos---- id a string " + datosActualizarRegistro.id());

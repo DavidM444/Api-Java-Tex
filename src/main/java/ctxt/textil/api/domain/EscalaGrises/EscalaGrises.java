@@ -1,9 +1,9 @@
 package ctxt.textil.api.domain.EscalaGrises;
 
+import ctxt.textil.api.application.dto.base.DatosEscalaGrises;
+import ctxt.textil.api.domain.DerivateClass;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,17 +13,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "escalagrises")
-public class EscalaGrises {
+public class EscalaGrises extends DerivateClass {
     private Integer esgCalificacion;
     private String esgValoracion;
-    @NotNull
-    @Id
-    private Long registroId;
-    public EscalaGrises(DatosEscalaGrises datosEscalaGrises) {
-        this.esgCalificacion = datosEscalaGrises.valoracion();
-        this.registroId = datosEscalaGrises.registroId();
+
+    public EscalaGrises(DatosEscalaGrises datosEscalaGrises, Long registroId) {
+        super(registroId);
+        this.esgCalificacion = datosEscalaGrises.calificacion();
+
     }
-    public void actualizarDatos(DatosActEscg datosActEscg) {
+    public void actualizarDatos(DatosEscalaGrises datosActEscg) {
         this.esgCalificacion = datosActEscg.calificacion();
     }
 }

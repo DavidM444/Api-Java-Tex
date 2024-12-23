@@ -1,9 +1,8 @@
 package ctxt.textil.api.domain.ControlPuntos;
+import ctxt.textil.api.application.dto.base.DatosControlPuntos;
+import ctxt.textil.api.domain.DerivateClass;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,17 +14,15 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "controlpuntos")
 //Tabla control de calidad 4 puntos con sus respectivos metodos
-public class CPP {
+public class CPP extends DerivateClass {
     private Integer cpPuntuacion;
     private String cpEstado;
-    @NotNull
-    @Id
-    private Long registroId;
-    public CPP(DatosControlPuntos datosControlPuntos) {
+    public CPP(DatosControlPuntos datosControlPuntos, Long registroId) {
+        super(registroId);
         this.cpPuntuacion = datosControlPuntos.puntuacion();
-        this.registroId = datosControlPuntos.registroId();
+
     }
-    public void actualizarDatos(DatosActCP datosActCPP) {
+    public void actualizarDatos(DatosControlPuntos datosActCPP) {
         this.cpPuntuacion = datosActCPP.puntuacion();
     }
 }

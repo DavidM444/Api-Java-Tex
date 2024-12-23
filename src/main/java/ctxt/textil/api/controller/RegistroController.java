@@ -1,15 +1,14 @@
 package ctxt.textil.api.controller;
 
+import ctxt.textil.api.application.dto.base.*;
 import ctxt.textil.api.domain.ControlPuntos.*;
-import ctxt.textil.api.domain.Dimensiones.DatosActDimensiones;
-import ctxt.textil.api.domain.Dimensiones.DatosDimensiones;
 import ctxt.textil.api.domain.Dimensiones.Dimensiones;
 import ctxt.textil.api.domain.Dimensiones.DimensionesRepository;
 import ctxt.textil.api.domain.EscalaGrises.*;
 import ctxt.textil.api.domain.Especificaciones.*;
 import ctxt.textil.api.domain.PAbsorcionPilling.*;
-import ctxt.textil.api.RespuestaTodo.DatosRegistroTodo;
-import ctxt.textil.api.RespuestaTodo.DatosRespuestaTodo;
+import ctxt.textil.api.application.dto.request.DatosRegistroTodo;
+import ctxt.textil.api.application.dto.response.DtoRegistro;
 import ctxt.textil.api.domain.Proveedor.Proveedor;
 import ctxt.textil.api.domain.Proveedor.ProveedorRpty;
 import ctxt.textil.api.domain.Registro.*;
@@ -22,9 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Creacion de controlador de registro, para peticiones post,get,put,delete
@@ -55,41 +52,21 @@ public class RegistroController {
     private EsgRepository esgRepository;
     @Autowired
     private ProveedorRpty prov;
+
+    //impl service
+    @Autowired
+    private RegistroService registroService;
     @PostMapping
-    @Transactional
-    public ResponseEntity<String> registrarRegistro(@RequestBody @Valid DatosRegistroTodo datosRegistroTodo, HttpServletRequest request, UriComponentsBuilder uriComponentsBuilder){
-        Object Idclatt = request.getAttribute("Idcl");
-        Long Idcl = ((Integer) Idclatt).longValue();
-        System.out.println("idcl "+Idcl + "id del prveedor: "+ datosRegistroTodo.proveedor());
+    public ResponseEntity<DatosRegistro> crearRegistroCompleto(@RequestBody @Valid DatosRegistroTodo datosRegistroTodo,
+                                                           HttpServletRequest request,
+                                                           UriComponentsBuilder uriComponentsBuilder){
+        Long Idcl = extractIdUser(request);
+       // System.out.println("idcl "+Idcl + "id del prveedor: "+ datosRegistroTodo.proveedor());
+        Registro datosRegistroRegistro = new Registro(datosRegistroTodo.fecha(), datosRegistroTodo.proveedor(),Idcl);
+        DatosRegistro registro =  registroService.guardarRegistro(datosRegistroTodo, Idcl);
 
-        //creacion de registro en la tabla
-        DatosRegistroRegistro datosRegistroRegistro = new DatosRegistroRegistro(datosRegistroTodo.fecha(), datosRegistroTodo.proveedor(),Idcl);
-        Registro registro =  registroRepository.save(new Registro(datosRegistroRegistro));
-        Long id = registro.getReId();
-        System.out.println("registro: "+registro.getReFecha() + " id "+id);
-
-        DatosDimensiones datosDimensiones = new DatosDimensiones(datosRegistroTodo.dimensiones().altura(),datosRegistroTodo.dimensiones().ancho(),id);
-        Dimensiones dimensiones = dimensionesRepository.save(new Dimensiones(datosDimensiones));
-
-        DatosEscalaGrises datosEscalaGrises = new DatosEscalaGrises(datosRegistroTodo.escalagrises().valoracion(),id);
-        EscalaGrises escalaGrises = esgRepository.save(new EscalaGrises(datosEscalaGrises));
-
-        DatosControlPuntos datosControlPuntos = new DatosControlPuntos(datosRegistroTodo.sispuntos().puntuacion(),id);
-        CPP cpp = cpRepository.save(new CPP(datosControlPuntos));
-
-        DatosPAbsorcionPilling datosPAbsorcionPilling = new DatosPAbsorcionPilling(datosRegistroTodo.abpilling().cantidad(),
-                datosRegistroTodo.abpilling().tiempo(),datosRegistroTodo.abpilling().rango(),id);
-
-        PAbsorcionPilling pAbsorcionPilling = papRepository.save( new PAbsorcionPilling(datosPAbsorcionPilling));
-
-        DatosEspecificaciones datosEspecificaciones = new DatosEspecificaciones(datosRegistroTodo.especificaciones().rollo(),
-                datosRegistroTodo.especificaciones().peso(),datosRegistroTodo.especificaciones().tipoTela(),
-                datosRegistroTodo.especificaciones().color(),id);
-        Especificaciones especificaciones = especificacionesRepository.save( new Especificaciones(datosEspecificaciones));
-
-
-        URI url = uriComponentsBuilder.path("/registro/{id}").buildAndExpand(registro.getReId()).toUri();
-        return ResponseEntity.created(url).body("Registro Creado Exitosamente");
+        URI url = uriComponentsBuilder.path("/registro/{id}").buildAndExpand(registro.id()).toUri();
+        return ResponseEntity.created(url).body(registro);
     }
 
     /**
@@ -97,7 +74,7 @@ public class RegistroController {
      * por id y se mapean a un solo objeto para visualizarse.
     */
     @GetMapping
-    public List<DatosRespuestaTodo> listadoRegistro(){
+    public List<DtoRegistro> listadoRegistro(){
         List<Registro> registros = registroRepository.findAll();
         return registros.stream()
                 .map(registro ->{
@@ -114,13 +91,13 @@ public class RegistroController {
                     Proveedor proveedor1 = prov.getReferenceById(proveedor);
 
 
-                    return new DatosRespuestaTodo(
+                    return new DtoRegistro(
                             id,registro.getReFecha(),proveedor1.getPrNombre(),proveedor1.getPrId(),proveedor1.getPrEmpresa(),
-                            new DatosActDimensiones(dimensiones.getDmAlto(),dimensiones.getDmAncho()),
-                            new DatosActEspecificaciones(especificaciones.getEsRollo(),especificaciones.getEsPeso(),especificaciones.getEsColor(),especificaciones.getEsTipoTela()),
+                            new DatosDimensiones(dimensiones.getDmAlto(),dimensiones.getDmAncho()),
+                            new DatosEspecificaciones(especificaciones.getEsRollo(),especificaciones.getEsPeso(),especificaciones.getEsColor(),especificaciones.getEsTipoTela()),
                             new DatosList(escalaid.getEsgValoracion(),escalaid.getEsgCalificacion()),
-                            new DatosActPAP(papillingid.getPaCantidad(),papillingid.getPaTiempo(),papillingid.getPRango()),
-                            new DatosActCP(cpid.getCpPuntuacion())
+                            new DatosPAbsorcionPilling(papillingid.getPaCantidad(),papillingid.getPaTiempo(),papillingid.getPRango()),
+                            new DatosControlPuntos(cpid.getCpPuntuacion())
                     );
 
                 }).toList();
@@ -199,7 +176,7 @@ public class RegistroController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<DatosRespuestaTodo> registroId(@PathVariable("id") Long idParam){
+    public ResponseEntity<DtoRegistro> registroId(@PathVariable("id") Long idParam){
        Registro registro = registroRepository.getReferenceById(idParam);
         Dimensiones dimensiones = dimensionesRepository.getReferenceById(idParam);
         Especificaciones especificaciones = especificacionesRepository.getReferenceById(idParam);
@@ -209,13 +186,23 @@ public class RegistroController {
         Proveedor proveedor1 = prov.getReferenceById(registro.getProveedorId().longValue());
 
 
-        return ResponseEntity.ok(new DatosRespuestaTodo(
+        return ResponseEntity.ok(new DtoRegistro(
                 registro.getReId(), registro.getReFecha(),proveedor1.getPrNombre(),proveedor1.getPrId(),proveedor1.getPrEmpresa(),
-                new DatosActDimensiones(dimensiones.getDmAlto(),dimensiones.getDmAncho()),
-                new DatosActEspecificaciones(especificaciones.getEsRollo(),especificaciones.getEsPeso(),especificaciones.getEsColor(),especificaciones.getEsTipoTela()),
+                new DatosDimensiones(dimensiones.getDmAlto(),dimensiones.getDmAncho()),
+                new DatosEspecificaciones(especificaciones.getEsRollo(),especificaciones.getEsPeso(),especificaciones.getEsColor(),especificaciones.getEsTipoTela()),
                 new DatosList(escalaid.getEsgValoracion(),escalaid.getEsgCalificacion()),
-                new DatosActPAP(papillingid.getPaCantidad(),papillingid.getPaTiempo(),papillingid.getPRango()),
-                new DatosActCP(cpid.getCpPuntuacion())
+                new DatosPAbsorcionPilling(papillingid.getPaCantidad(),papillingid.getPaTiempo(),papillingid.getPRango()),
+                new DatosControlPuntos(cpid.getCpPuntuacion())
         ));
+
+
+    }
+
+    public Long extractIdUser(HttpServletRequest request){
+        Object id = request.getAttribute("Idcl");
+        if(id==null){
+            throw new RuntimeException("Not found id. Register registro failded.");
+        }
+        return ((Integer)id).longValue();
     }
 }
