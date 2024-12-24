@@ -1,12 +1,13 @@
 package ctxt.textil.api.domain.Registro;
 
+import ctxt.textil.api.application.dto.base.*;
 import ctxt.textil.api.application.dto.request.DatosRegistroTodo;
 import ctxt.textil.api.application.dto.response.DtoRegistro;
 import ctxt.textil.api.domain.ControlPuntos.CPP;
 import ctxt.textil.api.domain.ControlPuntos.CPRepository;
-import ctxt.textil.api.domain.DerivateClass;
 import ctxt.textil.api.domain.Dimensiones.Dimensiones;
 import ctxt.textil.api.domain.Dimensiones.DimensionesRepository;
+import ctxt.textil.api.domain.EscalaGrises.DatosList;
 import ctxt.textil.api.domain.EscalaGrises.EscalaGrises;
 import ctxt.textil.api.domain.EscalaGrises.EsgRepository;
 import ctxt.textil.api.domain.Especificaciones.Especificaciones;
@@ -14,11 +15,15 @@ import ctxt.textil.api.domain.Especificaciones.EspecificacionesRepository;
 import ctxt.textil.api.domain.PAbsorcionPilling.PAPRepository;
 import ctxt.textil.api.domain.PAbsorcionPilling.PAbsorcionPilling;
 import ctxt.textil.api.domain.Proveedor.ProveedorRpty;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RegistroService {
@@ -40,9 +45,7 @@ public class RegistroService {
     private ProveedorRpty prov;
 
     @Transactional
-    public DatosRegistro guardarRegistro(DatosRegistroTodo datosRegistroTodo,
-                                        Long userId)
-    {
+    public DatosRegistro guardarRegistro(DatosRegistroTodo datosRegistroTodo, Long userId) {
         try {
             Registro registro = crearRegistroBase(datosRegistroTodo.fecha(),datosRegistroTodo.proveedor(), userId);
             crearEntidadesDerivadas(datosRegistroTodo,registro.getReId());
@@ -51,6 +54,16 @@ public class RegistroService {
             throw new RuntimeException("No se pudo crear el registro");
         }
     }
+
+    public ResponseEntity<List<DtoRegistro>> getListadoRegistro(){
+        List<DtoRegistro> response = responseDto(registroRepository.findAll());
+        return ResponseEntity.status(HttpStatus.FOUND).body(response);
+    }
+
+    private List<DtoRegistro> responseDto (List<Registro> registros){
+        return registros.stream().map(this::createRegistroDto).collect(Collectors.toList());
+    }
+
 
     private Registro crearRegistroBase(String fecha, Integer proveedor, Long userID){
         return registroRepository.save(new Registro(fecha,proveedor,userID));
@@ -65,8 +78,28 @@ public class RegistroService {
         especificacionesRepository.save(new Especificaciones(data.especificaciones(),registroId));
     }
 
-    private <T extends DerivateClass> T setearValorRegistroId(T clase){
-        return clase;
+    private DtoRegistro createRegistroDto(Registro reg){
+        Long id = reg.getReId();
+        Dimensiones dt = dimensionesRepository.getReferenceById(id);
+        Especificaciones esp = especificacionesRepository.getReferenceById(id);
+        EscalaGrises esg = esgRepository.getReferenceById(id);
+        PAbsorcionPilling pap = papRepository.getReferenceById(id);
+        CPP cpp = cpRepository.getReferenceById(id);
+
+        return new DtoRegistro(id,reg.getReFecha(),
+                setearValorRegistroId(prov,id).getPrNombre(),
+                setearValorRegistroId(prov,id).getPrId(),
+                setearValorRegistroId(prov,id).getPrEmpresa(),
+                new DatosDimensiones(dt),
+                new DatosEspecificaciones(esp),
+                new DatosList(esg),
+                new DatosPAbsorcionPilling(
+                        pap.getPaCantidad(),pap.getPaTiempo(), pap.getPRango()),
+                new DatosControlPuntos(cpp.getCpPuntuacion()));
+    }
+
+    private <T> T setearValorRegistroId(JpaRepository<T, Long> clase, Long id){
+        return clase.getReferenceById(id);
     }
 }
 

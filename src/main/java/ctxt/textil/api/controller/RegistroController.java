@@ -74,33 +74,9 @@ public class RegistroController {
      * por id y se mapean a un solo objeto para visualizarse.
     */
     @GetMapping
-    public List<DtoRegistro> listadoRegistro(){
+    public List<DtoRegistro> listadoRegistro(){ // return ResponseEntity
         List<Registro> registros = registroRepository.findAll();
-        return registros.stream()
-                .map(registro ->{
-
-                    Long id = registro.getReId();
-                    System.out.println("id de registro :" + id);
-                    Dimensiones dimensiones = dimensionesRepository.getReferenceById(id);
-                    Especificaciones especificaciones = especificacionesRepository.getReferenceById(id);
-                    EscalaGrises escalaid = esgRepository.getReferenceById(id);
-                    CPP cpid = cpRepository.getReferenceById(id);
-                    PAbsorcionPilling  papillingid =  papRepository.getReferenceById(id);
-                    Long proveedor = registro.getProveedorId().longValue();
-                    System.out.println("proveedor id "+proveedor);
-                    Proveedor proveedor1 = prov.getReferenceById(proveedor);
-
-
-                    return new DtoRegistro(
-                            id,registro.getReFecha(),proveedor1.getPrNombre(),proveedor1.getPrId(),proveedor1.getPrEmpresa(),
-                            new DatosDimensiones(dimensiones.getDmAlto(),dimensiones.getDmAncho()),
-                            new DatosEspecificaciones(especificaciones.getEsRollo(),especificaciones.getEsPeso(),especificaciones.getEsColor(),especificaciones.getEsTipoTela()),
-                            new DatosList(escalaid.getEsgValoracion(),escalaid.getEsgCalificacion()),
-                            new DatosPAbsorcionPilling(papillingid.getPaCantidad(),papillingid.getPaTiempo(),papillingid.getPRango()),
-                            new DatosControlPuntos(cpid.getCpPuntuacion())
-                    );
-
-                }).toList();
+        return registroService.getListadoRegistro().getBody();
     }
     // Actualizacion de registros
     @PutMapping
