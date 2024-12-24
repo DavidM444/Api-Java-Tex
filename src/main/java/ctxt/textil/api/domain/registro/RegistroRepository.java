@@ -1,4 +1,4 @@
-package ctxt.textil.api.domain.Registro;
+package ctxt.textil.api.domain.registro;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

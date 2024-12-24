@@ -1,21 +1,17 @@
 package ctxt.textil.api.controller;
 
-import ctxt.textil.api.application.dto.base.*;
-import ctxt.textil.api.domain.ControlPuntos.*;
-import ctxt.textil.api.domain.Dimensiones.Dimensiones;
-import ctxt.textil.api.domain.Dimensiones.DimensionesRepository;
-import ctxt.textil.api.domain.EscalaGrises.*;
-import ctxt.textil.api.domain.Especificaciones.*;
-import ctxt.textil.api.domain.PAbsorcionPilling.*;
+import ctxt.textil.api.application.dto.request.DatosActualizarRegistro;
+import ctxt.textil.api.application.dto.response.DatosRegistro;
+import ctxt.textil.api.application.dto.response.DatosRespuestaRegistro;
 import ctxt.textil.api.application.dto.request.DatosRegistroTodo;
 import ctxt.textil.api.application.dto.response.DtoRegistro;
-import ctxt.textil.api.domain.Proveedor.Proveedor;
-import ctxt.textil.api.domain.Proveedor.ProveedorRpty;
-import ctxt.textil.api.domain.Registro.*;
+import ctxt.textil.api.application.dto.response.DtoInfo;
+import ctxt.textil.api.domain.registro.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -36,30 +32,15 @@ import java.util.List;
 @RequestMapping("/registro")
 
 public class RegistroController {
-    //inyeccion de repositorios
     @Autowired
     private RegistroRepository registroRepository;
     @Autowired
-    private DimensionesRepository dimensionesRepository;
-    @Autowired
-    private EspecificacionesRepository especificacionesRepository;
-    @Autowired
-    private CPRepository cpRepository;
-    @Autowired
-    private PAPRepository papRepository;
-    //Creacion de registros
-    @Autowired
-    private EsgRepository esgRepository;
-    @Autowired
-    private ProveedorRpty prov;
-
-    //impl service
-    @Autowired
     private RegistroService registroService;
+
     @PostMapping
     public ResponseEntity<DatosRegistro> crearRegistroCompleto(@RequestBody @Valid DatosRegistroTodo datosRegistroTodo,
-                                                           HttpServletRequest request,
-                                                           UriComponentsBuilder uriComponentsBuilder){
+                                                               HttpServletRequest request,
+                                                               UriComponentsBuilder uriComponentsBuilder){
         Long Idcl = extractIdUser(request);
        // System.out.println("idcl "+Idcl + "id del prveedor: "+ datosRegistroTodo.proveedor());
         Registro datosRegistroRegistro = new Registro(datosRegistroTodo.fecha(), datosRegistroTodo.proveedor(),Idcl);
@@ -82,46 +63,13 @@ public class RegistroController {
     @PutMapping
     @Transactional
     public ResponseEntity<DatosRespuestaRegistro> actualizarRegistro(@RequestBody @Valid DatosActualizarRegistro datosActualizarRegistro){
-        Registro registro = registroRepository.getReferenceById(datosActualizarRegistro.id());
-        registro.actualizarDatos(datosActualizarRegistro);
-
-        Dimensiones dimensiones = dimensionesRepository.getReferenceById(datosActualizarRegistro.id());
-        dimensiones.actualizarDatos(datosActualizarRegistro.dimensiones());
-
-        Especificaciones especificaciones = especificacionesRepository.getReferenceById(datosActualizarRegistro.id());
-        especificaciones.actualizarDatos(datosActualizarRegistro.especificaciones());
-
-        EscalaGrises escalaGrises = esgRepository.getReferenceById(datosActualizarRegistro.id());
-        escalaGrises.actualizarDatos(datosActualizarRegistro.escalagrises());
-
-        CPP cpp = cpRepository.getReferenceById(datosActualizarRegistro.id());
-        cpp.actualizarDatos(datosActualizarRegistro.sispuntos());
-
-        PAbsorcionPilling pAbsorcionPilling = papRepository.getReferenceById(datosActualizarRegistro.id());
-        pAbsorcionPilling.actualizarDatos(datosActualizarRegistro.abpilling());
-
-        return ResponseEntity.ok(new DatosRespuestaRegistro("Registro Actualizado",registro.getReId(),registro.getReFecha()));
+        DatosRespuestaRegistro response=  registroService.actualizarRegistro(datosActualizarRegistro);
+        return ResponseEntity.ok(response);
     }
     @DeleteMapping("/{id}")
     @Transactional
     public void  eliminarRegistro(@PathVariable Long id){
-        Dimensiones dimensiones = dimensionesRepository.getReferenceById(id);
-        dimensionesRepository.delete(dimensiones);
-
-        EscalaGrises escalaGrises = esgRepository.getReferenceById(id);
-        esgRepository.delete(escalaGrises);
-
-        CPP cpp = cpRepository.getReferenceById(id);
-        cpRepository.delete(cpp);
-
-        PAbsorcionPilling pAbsorcionPilling = papRepository.getReferenceById(id);
-        papRepository.delete(pAbsorcionPilling);
-
-        Especificaciones especificaciones = especificacionesRepository.getReferenceById(id);
-        especificacionesRepository.delete(especificaciones);
-
-        Registro registro = registroRepository.getReferenceById(id);
-        registroRepository.delete(registro);
+        registroService.eliminar(id);
     }
     /*
     //trayendo datos de un solo registro
@@ -136,42 +84,15 @@ public class RegistroController {
 
    @GetMapping("/datos")
     public ResponseEntity<DtoInfo> dataInfoRegistros(){
-       Integer datosBajos = esgRepository.countByEsgValoracion("Bajo");
-       Integer datosModerados = esgRepository.countByEsgValoracion("Moderada");
-       Integer datosAltos = esgRepository.countByEsgValoracion("Alta");
-       Integer datosExcelentes = esgRepository.countByEsgValoracion("Excelente");
-
-       Integer cambioSevero = papRepository.countBypConsideracion("Cambio Severo");
-       Integer cambioConsiderable = papRepository.countBypConsideracion("Cambio Considerable");
-       Integer formacionPilling = papRepository.countBypConsideracion("Formacion Pilling");
-       Integer pilling = papRepository.countBypConsideracion("Pilling");
-       Integer noHayPilling = papRepository.countBypConsideracion("No Hay Pilling");
-       return ResponseEntity.ok(new DtoInfo(datosBajos,datosModerados,datosAltos,datosExcelentes,
-               cambioSevero,cambioConsiderable,formacionPilling,pilling,noHayPilling));
+       DtoInfo dtoInfo = registroService.obtenerDatosEstado();
+       return ResponseEntity.ok(dtoInfo);
     }
 
 
     @GetMapping("/{id}")
     public ResponseEntity<DtoRegistro> registroId(@PathVariable("id") Long idParam){
-       Registro registro = registroRepository.getReferenceById(idParam);
-        Dimensiones dimensiones = dimensionesRepository.getReferenceById(idParam);
-        Especificaciones especificaciones = especificacionesRepository.getReferenceById(idParam);
-        EscalaGrises escalaid = esgRepository.getReferenceById(idParam);
-        CPP cpid = cpRepository.getReferenceById(idParam);
-        PAbsorcionPilling  papillingid =  papRepository.getReferenceById(idParam);
-        Proveedor proveedor1 = prov.getReferenceById(registro.getProveedorId().longValue());
-
-
-        return ResponseEntity.ok(new DtoRegistro(
-                registro.getReId(), registro.getReFecha(),proveedor1.getPrNombre(),proveedor1.getPrId(),proveedor1.getPrEmpresa(),
-                new DatosDimensiones(dimensiones.getDmAlto(),dimensiones.getDmAncho()),
-                new DatosEspecificaciones(especificaciones.getEsRollo(),especificaciones.getEsPeso(),especificaciones.getEsColor(),especificaciones.getEsTipoTela()),
-                new DatosList(escalaid.getEsgValoracion(),escalaid.getEsgCalificacion()),
-                new DatosPAbsorcionPilling(papillingid.getPaCantidad(),papillingid.getPaTiempo(),papillingid.getPRango()),
-                new DatosControlPuntos(cpid.getCpPuntuacion())
-        ));
-
-
+       DtoRegistro dto = registroService.obtenerRegistroPorId(idParam);
+       return ResponseEntity.status(HttpStatus.FOUND).body(dto);
     }
 
     public Long extractIdUser(HttpServletRequest request){
