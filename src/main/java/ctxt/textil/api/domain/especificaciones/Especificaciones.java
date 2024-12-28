@@ -1,7 +1,8 @@
-package ctxt.textil.api.domain.Especificaciones;
+package ctxt.textil.api.domain.especificaciones;
 
 import ctxt.textil.api.application.dto.base.DatosEspecificaciones;
-import ctxt.textil.api.domain.DerivateClass;
+import ctxt.textil.api.domain.base.DerivateClass;
+import ctxt.textil.api.domain.base.Updatable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "especificacion")
-public class Especificaciones extends DerivateClass {
+public class Especificaciones extends DerivateClass implements Updatable<DatosEspecificaciones> {
     @NotBlank
     private String esRollo;
     private String esPeso;

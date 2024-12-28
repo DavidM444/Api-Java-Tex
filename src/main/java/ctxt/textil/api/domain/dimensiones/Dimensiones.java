@@ -1,7 +1,8 @@
-package ctxt.textil.api.domain.Dimensiones;
+package ctxt.textil.api.domain.dimensiones;
 
 import ctxt.textil.api.application.dto.base.DatosDimensiones;
-import ctxt.textil.api.domain.DerivateClass;
+import ctxt.textil.api.domain.base.DerivateClass;
+import ctxt.textil.api.domain.base.Updatable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "dimensiones")
-public class Dimensiones extends DerivateClass {
+public class Dimensiones extends DerivateClass implements Updatable<DatosDimensiones> {
     private double dmAlto;
     private double dmAncho;
 
@@ -26,12 +27,20 @@ public class Dimensiones extends DerivateClass {
         this.dmAlto = datosDimensiones.altura();
         this.dmAncho = datosDimensiones.ancho();
     }
-    public void actualizarDatos(DatosDimensiones datosActDimensiones) {
-        if(datosActDimensiones.ancho()==0.0){
-            this.dmAlto = datosActDimensiones.altura();
+    @Override
+    public void actualizarDatos(DatosDimensiones datos) {
+        if (datos == null) {
+            throw new IllegalArgumentException("Los datos de dimensiones no pueden ser nulos");
         }
-        if (datosActDimensiones.ancho()!=0.0){
-            this.dmAncho = datosActDimensiones.ancho();
+
+        // Validar y actualizar altura
+        if (datos.altura() > 0) {
+            this.dmAlto = datos.altura();
+        }
+
+        // Validar y actualizar ancho
+        if (datos.ancho() > 0) {
+            this.dmAncho = datos.ancho();
         }
     }
 }
