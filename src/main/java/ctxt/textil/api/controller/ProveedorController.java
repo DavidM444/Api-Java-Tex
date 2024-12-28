@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 import java.util.List;
 
 /**
@@ -20,25 +23,20 @@ import java.util.List;
 @RequestMapping("/proveedor")
 public class ProveedorController {
     @Autowired
-    private ProveedorRpty proveedorRpty;
+    private ProveedorService proveedorService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<DtoResP>> agregarProveedor(@RequestBody @Valid DatosProveedor dtoRgP){
-        System.out.println(dtoRgP);
-        Proveedor proveedor = proveedorRpty.save(new Proveedor(dtoRgP));
-        DtoResP dtoResP = new DtoResP(proveedor.getPrId(), proveedor.getPrNombre(), proveedor.getPrEmpresa(),
-                proveedor.getPrTelefono(), proveedor.getPrDireccion());
+    public ResponseEntity<ApiResponse<DtoResP>> agregarProveedor(@RequestBody @Valid DatosProveedor dtoRgP, UriComponentsBuilder uriBuilder){
 
-        if(proveedor.getPrId()==null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>(
-                false,"Not agregated data",null));
+        DtoResP proveedor = proveedorService.saveProveedor(dtoRgP);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true,"created proveedor",dtoResP));
+        URI location = uriBuilder.path("/api/v1/proveedores/{id}")
+                .buildAndExpand(proveedor.id()).toUri();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true,"created proveedor", proveedor));
     };
     @GetMapping
-    public List<DatosProvName> listadoProveedores(){
-        List<Proveedor> proveedores = proveedorRpty.findAll();
-        return proveedores.stream().map(
-                proveedor -> new  DatosProvName(proveedor.getPrNombre(),proveedor.getPrId())
-        ).toList();
+    public ResponseEntity<List<DatosProvName>> listadoProveedores(){
+        return ResponseEntity.ok( proveedorService.listarProveedores());
     }
 }
