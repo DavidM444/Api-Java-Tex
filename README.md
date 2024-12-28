@@ -1,5 +1,5 @@
 # Api-Java-Tex
-Api para majeno de registros de calidad textil.
+Api para manejo de registros de calidad textil.
 ---
 Gestiona la creación de registros y manejo de datos textiles de manera genérica.
 Suministra funcionalidades como el registro de usuarios en el sistema, asi como 
