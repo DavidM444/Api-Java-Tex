@@ -1,4 +1,4 @@
-package ctxt.textil.api.infra.errores;
+package ctxt.textil.api.infraestructure.exception;
 
 
 import com.auth0.jwt.exceptions.JWTDecodeException;

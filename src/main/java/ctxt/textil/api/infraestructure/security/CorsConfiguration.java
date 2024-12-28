@@ -1,4 +1,4 @@
-package ctxt.textil.api.infra.security;
+package ctxt.textil.api.infraestructure.security;
 /*
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

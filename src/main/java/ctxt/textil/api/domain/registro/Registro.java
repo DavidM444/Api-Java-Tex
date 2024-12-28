@@ -1,5 +1,6 @@
-package ctxt.textil.api.domain.Registro;
+package ctxt.textil.api.domain.registro;
 
+import ctxt.textil.api.application.dto.request.DatosActualizarRegistro;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

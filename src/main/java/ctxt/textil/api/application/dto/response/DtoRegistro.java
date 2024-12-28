@@ -3,7 +3,7 @@ package ctxt.textil.api.application.dto.response;
 import ctxt.textil.api.application.dto.base.DatosDimensiones;
 
 import ctxt.textil.api.application.dto.base.DatosControlPuntos;
-import ctxt.textil.api.domain.EscalaGrises.DatosList;
+import ctxt.textil.api.domain.escalagrises.DatosList;
 import ctxt.textil.api.application.dto.base.DatosEspecificaciones;
 import ctxt.textil.api.application.dto.base.DatosPAbsorcionPilling;
 

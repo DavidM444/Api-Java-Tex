@@ -1,5 +1,6 @@
-package ctxt.textil.api.domain.Proveedor;
+package ctxt.textil.api.domain.proveedor;
 
+import ctxt.textil.api.application.dto.request.DatosProveedor;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

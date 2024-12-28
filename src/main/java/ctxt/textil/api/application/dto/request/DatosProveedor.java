@@ -1,4 +1,4 @@
-package ctxt.textil.api.domain.Proveedor;
+package ctxt.textil.api.application.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

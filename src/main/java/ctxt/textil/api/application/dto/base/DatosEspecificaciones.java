@@ -1,6 +1,6 @@
 package ctxt.textil.api.application.dto.base;
 
-import ctxt.textil.api.domain.Especificaciones.Especificaciones;
+import ctxt.textil.api.domain.especificaciones.Especificaciones;
 
 public record DatosEspecificaciones(String rollo, String peso, String tipoTela,
                                     String color) {

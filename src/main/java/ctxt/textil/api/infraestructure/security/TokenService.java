@@ -1,14 +1,13 @@
-package ctxt.textil.api.infra.security;
+package ctxt.textil.api.infraestructure.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import ctxt.textil.api.UserAdmin.UserAdmin;
-import ctxt.textil.api.Usuario.DataUser;
-import ctxt.textil.api.Usuario.Usuario;
 
+import ctxt.textil.api.domain.user.useradmin.UserAdmin;
+import ctxt.textil.api.domain.user.usuario.Usuario;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -54,12 +53,11 @@ public class TokenService{
     private Instant generarExpedicionFecha() {
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-05:00"));
     }
-    //subject
+
     public String getSubject(String token, Boolean uri){
         usoAlgorithm(uri);
         DecodedJWT verifier = null;
         try {
-
             verifier = JWT.require(algorithm2)
                     .withIssuer(Issuer)
                     .build()
@@ -73,6 +71,7 @@ public class TokenService{
         }
         return verifier.getSubject();
     }
+
     public Integer getIdClaim(String token){
         DecodedJWT verifier = null;
         Algorithm algorithm = Algorithm.HMAC256(apiSecret);
@@ -92,8 +91,8 @@ public class TokenService{
                 .build()
                 .verify(token);
         return verifier.getClaim("ad_id").asInt();
-
     }
+
     protected String getIssClaim(String token, String url){
         Boolean uri = url.equals("/admin");
         usoAlgorithm(uri);
@@ -103,9 +102,8 @@ public class TokenService{
                 .build()
                 .verify(token);
         return verifier.getClaim("iss").asString();
-
-
     }
+
     public void usoAlgorithm(Boolean uri){
         if (uri){
             algorithm2=Algorithm.HMAC256(apiAdmin);

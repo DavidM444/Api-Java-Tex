@@ -1,7 +1,7 @@
-package ctxt.textil.api.infra.security;
+package ctxt.textil.api.infraestructure.security;
 
-import ctxt.textil.api.UserAdmin.UserAdminRepository;
-import ctxt.textil.api.Usuario.UserRepository;
+import ctxt.textil.api.domain.user.useradmin.UserAdminRepository;
+import ctxt.textil.api.domain.user.usuario.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

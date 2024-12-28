@@ -1,20 +1,24 @@
 package ctxt.textil.api.controller;
 
-import ctxt.textil.api.Security.Encript.EncriptKey;
-import ctxt.textil.api.UserAdmin.UserAdmin;
-import ctxt.textil.api.UserAdmin.UserAdminRepository;
-import ctxt.textil.api.Usuario.*;
-import ctxt.textil.api.Usuario.Roles.DtoRol;
-import ctxt.textil.api.Usuario.Roles.Rol;
-import ctxt.textil.api.Usuario.Roles.RolRepository;
+import ctxt.textil.api.domain.user.useradmin.UserAdmin;
+import ctxt.textil.api.domain.user.useradmin.UserAdminRepository;
+import ctxt.textil.api.application.dto.base.DataUser;
+import ctxt.textil.api.application.dto.request.DatosNewUser;
+import ctxt.textil.api.application.dto.base.DtoRol;
+import ctxt.textil.api.domain.user.usuario.Roles.Rol;
+import ctxt.textil.api.domain.user.usuario.Roles.RolRepository;
+import ctxt.textil.api.domain.user.usuario.UserRepository;
+import ctxt.textil.api.domain.user.usuario.Usuario;
+import ctxt.textil.api.infraestructure.security.EncriptKey;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 /*
 Registro de usuarios nuevos del sistema.
 Cuenta con generacion de codigo bycript para manejo de contraseñas de usuario.
@@ -26,6 +30,7 @@ public class UserController {
     private String apiSecret;
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private UserAdminRepository userAdminRepository;
     @Autowired

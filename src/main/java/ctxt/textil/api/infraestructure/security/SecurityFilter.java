@@ -1,6 +1,6 @@
-package ctxt.textil.api.infra.security;
+package ctxt.textil.api.infraestructure.security;
 
-import ctxt.textil.api.Usuario.UserRepository;
+import ctxt.textil.api.domain.user.usuario.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package ctxt.textil.api.domain.EscalaGrises;
+package ctxt.textil.api.domain.escalagrises;
 
 public record DatosList(String valoracion, Integer calificacion) {
     public DatosList(EscalaGrises esg){

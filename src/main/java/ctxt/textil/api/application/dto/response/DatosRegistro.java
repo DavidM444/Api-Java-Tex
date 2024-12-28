@@ -1,5 +1,6 @@
-package ctxt.textil.api.domain.Registro;
+package ctxt.textil.api.application.dto.response;
 
+import ctxt.textil.api.domain.registro.Registro;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
