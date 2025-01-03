@@ -19,6 +19,7 @@ import ctxt.textil.api.domain.especificaciones.EspecificacionesRepository;
 import ctxt.textil.api.domain.pabsorcionpilling.PAPRepository;
 import ctxt.textil.api.domain.pabsorcionpilling.PAbsorcionPilling;
 import ctxt.textil.api.domain.proveedor.ProveedorRpty;
+import ctxt.textil.api.domain.proveedor.ProveedorService;
 import ctxt.textil.api.infraestructure.exception.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -37,7 +38,6 @@ public class RegistroService {
 
     @Autowired
     private RegistroRepository registroRepository;
-
     @Autowired
     private DimensionesRepository dimensionesRepository;
     @Autowired
@@ -49,7 +49,7 @@ public class RegistroService {
     @Autowired
     private EsgRepository esgRepository;
     @Autowired
-    private ProveedorRpty prov;
+    private ProveedorService provServ;
 
     @Transactional
     public DatosRegistro guardarRegistro(DatosRegistroTodo datosRegistroTodo, Long userId) {
@@ -81,7 +81,7 @@ public class RegistroService {
         deleteRegistroId(esgRepository,id);
         deleteRegistroId(cpRepository,id);
         deleteRegistroId(papRepository,id);
-        deleteRegistroId(esgRepository,id);
+        deleteRegistroId(especificacionesRepository,id);
         //finally delete non depend entity
         deleteRegistroId(registroRepository,id);
 
@@ -126,6 +126,7 @@ public class RegistroService {
     private DtoRegistro createRegistroDto(Registro reg){
         //todo: extraer la obtencion de los objetos por referencebyid a un metodo que retorne un map
         Long id = reg.getReId();
+        Long idProv = reg.getProveedorId().longValue();
         Dimensiones dt = dimensionesRepository.getReferenceById(id);
         Especificaciones esp = especificacionesRepository.getReferenceById(id);
         EscalaGrises esg = esgRepository.getReferenceById(id);
@@ -133,9 +134,9 @@ public class RegistroService {
         CPP cpp = cpRepository.getReferenceById(id);
 
         return new DtoRegistro(id,reg.getReFecha(),
-                setearValorRegistroId(prov,id).getPrNombre(),
-                setearValorRegistroId(prov,id).getPrId(),
-                setearValorRegistroId(prov,id).getPrEmpresa(),
+                provServ.obtenerProveedorPorId(idProv).nombre(),
+                provServ.obtenerProveedorPorId(idProv).id(),
+                provServ.obtenerProveedorPorId(idProv).emprea(),
                 new DatosDimensiones(dt),
                 new DatosEspecificaciones(esp),
                 new DatosList(esg),
@@ -157,7 +158,7 @@ public class RegistroService {
         try{
             entityMap.put("registro", setearValorRegistroId(registroRepository,regId));
             entityMap.put("dimensiones", setearValorRegistroId(dimensionesRepository,regId));
-            entityMap.put("especificaciones", setearValorRegistroId(esgRepository,regId));
+            entityMap.put("especificaciones", setearValorRegistroId(especificacionesRepository,regId));
             entityMap.put("escalaGrises", setearValorRegistroId(esgRepository,regId));
             entityMap.put("cpp", setearValorRegistroId(cpRepository,regId));
             entityMap.put("pap", setearValorRegistroId(papRepository,regId));
