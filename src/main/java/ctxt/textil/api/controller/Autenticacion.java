@@ -1,13 +1,12 @@
 package ctxt.textil.api.controller;
-import ctxt.textil.api.Usuario.DataUser;
-import ctxt.textil.api.Usuario.DatosAutenticarUsuario;
-import ctxt.textil.api.Usuario.UserRepository;
-import ctxt.textil.api.Usuario.Usuario;
-import ctxt.textil.api.infra.security.TokenService;
+
+import ctxt.textil.api.application.dto.base.DataUser;
+import ctxt.textil.api.application.dto.request.DatosAutenticarUsuario;
+import ctxt.textil.api.domain.user.usuario.UserRepository;
+import ctxt.textil.api.domain.user.usuario.Usuario;
+import ctxt.textil.api.infraestructure.security.TokenService;
 import jakarta.validation.Valid;
-import org.apache.catalina.Authenticator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 /*
 @Autor: David Muñoz
 @Spring-API
--- Controlador api, para logeo de usuarios a traves de autenticacion JWT.
+-- Controlador api, para registro de usuarios a traves de autenticacion JWT.
 -- Respuesta Http con el token de usuario generado en caso de autenticacion exitosa.
  */
 @RestController

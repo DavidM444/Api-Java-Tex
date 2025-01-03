@@ -1,11 +1,10 @@
 package ctxt.textil.api.controller;
 
-import ctxt.textil.api.UserAdmin.UserAdmin;
-import ctxt.textil.api.UserAdmin.UserAdminRepository;
-import ctxt.textil.api.Usuario.DatosAutenticarUsuario;
-import ctxt.textil.api.Usuario.UserRepository;
-import ctxt.textil.api.Usuario.Usuario;
-import ctxt.textil.api.infra.security.TokenService;
+import ctxt.textil.api.domain.user.useradmin.UserAdmin;
+import ctxt.textil.api.domain.user.useradmin.UserAdminRepository;
+import ctxt.textil.api.application.dto.request.DatosAutenticarUsuario;
+import ctxt.textil.api.domain.user.usuario.UserRepository;
+import ctxt.textil.api.infraestructure.security.TokenService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +25,7 @@ public class AdminController {
 
     @Autowired
     private TokenService tokenService;
+
     @Autowired
     private UserAdminRepository userRep;
 

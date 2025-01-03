@@ -1,14 +1,18 @@
 package ctxt.textil.api.controller;
 
-import ctxt.textil.api.domain.PAbsorcionPilling.DatosProvName;
-import ctxt.textil.api.domain.Proveedor.DtoResP;
-import ctxt.textil.api.domain.Proveedor.DtoRgP;
-import ctxt.textil.api.domain.Proveedor.Proveedor;
-import ctxt.textil.api.domain.Proveedor.ProveedorRpty;
+import ctxt.textil.api.application.dto.response.DatosProvName;
+import ctxt.textil.api.application.dto.request.DatosProveedor;
+import ctxt.textil.api.application.dto.response.DtoResP;
+import ctxt.textil.api.domain.proveedor.*;
+import ctxt.textil.api.domain.base.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 import java.util.List;
 
 /**
@@ -19,21 +23,20 @@ import java.util.List;
 @RequestMapping("/proveedor")
 public class ProveedorController {
     @Autowired
-    private ProveedorRpty proveedorRpty;
+    private ProveedorService proveedorService;
 
     @PostMapping
-    public ResponseEntity<DtoResP> agregarProveedor(@RequestBody @Valid DtoRgP dtoRgP){
-        System.out.println(dtoRgP);
-        Proveedor proveedor = proveedorRpty.save(new Proveedor(dtoRgP));
-        DtoResP dtoResP = new DtoResP(proveedor.getPrId(), proveedor.getPrNombre(), proveedor.getPrEmpresa(),
-                proveedor.getPrTelefono(), proveedor.getPrDireccion());
-        return ResponseEntity.ok(dtoResP);
+    public ResponseEntity<ApiResponse<DtoResP>> agregarProveedor(@RequestBody @Valid DatosProveedor dtoRgP, UriComponentsBuilder uriBuilder){
+
+        DtoResP proveedor = proveedorService.saveProveedor(dtoRgP);
+
+        URI location = uriBuilder.path("/api/v1/proveedores/{id}")
+                .buildAndExpand(proveedor.id()).toUri();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true,"created proveedor", proveedor));
     };
     @GetMapping
-    public List<DatosProvName> listadoProveedores(){
-        List<Proveedor> proveedores = proveedorRpty.findAll();
-        return proveedores.stream().map(
-                proveedor -> new  DatosProvName(proveedor.getPrNombre(),proveedor.getPrId())
-        ).toList();
+    public ResponseEntity<List<DatosProvName>> listadoProveedores(){
+        return ResponseEntity.ok( proveedorService.listarProveedores());
     }
 }
