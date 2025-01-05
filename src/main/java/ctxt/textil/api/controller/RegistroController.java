@@ -42,7 +42,6 @@ public class RegistroController {
                                                                HttpServletRequest request,
                                                                UriComponentsBuilder uriComponentsBuilder){
         Long Idcl = extractIdUser(request);
-       // System.out.println("idcl "+Idcl + "id del prveedor: "+ datosRegistroTodo.proveedor());
         Registro datosRegistroRegistro = new Registro(datosRegistroTodo.fecha(), datosRegistroTodo.proveedor(),Idcl);
         DatosRegistro registro =  registroService.guardarRegistro(datosRegistroTodo, Idcl);
 

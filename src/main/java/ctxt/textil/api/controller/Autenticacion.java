@@ -6,6 +6,7 @@ import ctxt.textil.api.domain.user.usuario.UserRepository;
 import ctxt.textil.api.domain.user.usuario.Usuario;
 import ctxt.textil.api.infraestructure.security.TokenService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 -- Controlador api, para registro de usuarios a traves de autenticacion JWT.
 -- Respuesta Http con el token de usuario generado en caso de autenticacion exitosa.
  */
+@Slf4j
 @RestController
 @RequestMapping("/login")
 public class Autenticacion {
@@ -38,13 +40,13 @@ public class Autenticacion {
 
     @PostMapping
     public ResponseEntity<DataUser> autenticarUsuario(@RequestBody @Valid DatosAutenticarUsuario datosAutenticarUsuario){
-        System.out.println("autenticacion: "+datosAutenticarUsuario);
+        log.debug("autentication: {}" ,datosAutenticarUsuario);
         Authentication token = new UsernamePasswordAuthenticationToken(datosAutenticarUsuario.email(),datosAutenticarUsuario.clave());
         var usuarioAutenticado = authenticationManager.authenticate(token);
-        System.out.println("22222 "+usuarioAutenticado.toString());
+        log.debug("22222 {}",usuarioAutenticado.toString());
         var jwtToken = tokenService.generarToken((Usuario) usuarioAutenticado.getPrincipal());
         Integer userId = tokenService.getIdClaim(jwtToken);
-        System.out.println("token: "+jwtToken + "id: "+userId);
+        log.debug("token: {}  id: {}",jwtToken,userId);
         Usuario user = userRepository.findByUsId(userId);
 
         DataUser data = new DataUser(user.getUsNombre(), user.getUsApellido(), user.getUsEmail(), jwtToken);

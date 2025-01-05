@@ -7,17 +7,22 @@ import ctxt.textil.api.domain.user.usuario.UserRepository;
 import ctxt.textil.api.infraestructure.security.TokenService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.LinkedList;
 import java.util.List;
 
+
+@Slf4j
 @RestController
 @RequestMapping("/admin")
+
 public class AdminController {
 
     @Autowired
@@ -35,14 +40,15 @@ public class AdminController {
     @Transactional
     @PostMapping
     public ResponseEntity<String> autenticarAdmin(@RequestBody @Valid DatosAutenticarUsuario datosAdmin){
-        System.out.println("datos usuario admin: "+datosAdmin);
+
+        log.debug("datos usuario admin: {}",datosAdmin);
+
         Authentication auth = new UsernamePasswordAuthenticationToken(datosAdmin.email(),datosAdmin.clave());
-        System.out.println("auth "+auth);
         var authenticationResult = authenticationManager.authenticate(auth);
 
-        System.out.println("user "+authenticationResult.toString()+ " ->auth: "+auth);
+        log.debug("user {}   ->auth: {}",authenticationResult.toString(),auth);
         var jwtToken = tokenService.generarAdminToken((UserAdmin) authenticationResult.getPrincipal());
-        System.out.println("tok "+jwtToken);
+        log.debug("token {}", jwtToken);
 
         /* For find and return data user created:
         Integer id = tokenService.getIdClaim(jwtToken);

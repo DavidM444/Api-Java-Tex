@@ -12,6 +12,7 @@ import ctxt.textil.api.domain.user.usuario.Usuario;
 import ctxt.textil.api.infraestructure.security.EncriptKey;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 Registro de usuarios nuevos del sistema.
 Cuenta con generacion de codigo bycript para manejo de contraseñas de usuario.
  */
+@Slf4j
 @RestController
 @RequestMapping("/signup")
 public class UserController {
@@ -40,7 +42,7 @@ public class UserController {
     private final static String RoleAdmin = "ROLE_ADMIN";
     @PostMapping
     public ResponseEntity<DataUser> registroUser(@RequestBody @Valid DatosNewUser datosNewUser)  {
-        System.out.println(datosNewUser);
+        log.debug("Datos nuevo usuario {}",datosNewUser);
         String clave = datosNewUser.clave();
         String claveSave = EncriptKey.BycriptKeydd(clave);
         DataUser dataUser = new DataUser(datosNewUser.nombre(), datosNewUser.apellido(), datosNewUser.email(), claveSave);
@@ -60,44 +62,19 @@ public class UserController {
     }
 
     private void saveAuthorities(DtoRol rol) {
-        System.out.println("roles "+ rol.idUser()+" "+rol.rolName());
+        log.debug("Rol Info: ID {}, Name: {} ", rol.idUser(),rol.rolName());
         try {
             Boolean validacion = verifyAutorityAdmin(rol.rolName());
         } catch (Exception e) {
             throw new RuntimeException("Rol invalido: "+e.getMessage());
         }
         Rol rolData = new Rol(rol);
-        repositoryRol.save(rolData);
+        Rol rol2 = repositoryRol.save(rolData);
     }
 
     private Boolean verifyAutorityAdmin(String rolAutority) {
-        System.out.println("aut "+rolAutority);
+        log.info("verifying rol {}",rolAutority);
         return rolAutority.equals(RoleAdmin)||rolAutority.equals(RoleUser);
-    }
-
-    public static void main(String[] args) {
-        System.out.println(hi("hi no soy hi"));
-
-    }
-    public  static int hi( String str){
-
-        if(str.length()<2){
-            return 0;
-        }
-        int count = 0;
-        char[] val = str.toCharArray();
-
-
-        for(int i = 0; i < val.length; i++){
-            if(String.valueOf(val[i]).equals("h") && String.valueOf(val[i + 1]).equals("i")){
-                count+= 1;
-            }
-
-
-        }
-        return count;
-
-
     }
 }
 
