@@ -18,7 +18,6 @@ import java.io.IOException;
 
 /** Filtro que realiza la autenticacion de un usurio a traves de un token JWT(Json Web Token).
  * @params Request Http
- * @return Autenticicaion de usuario
  * @author Rodrigo David Muñoz
  */
 @Slf4j

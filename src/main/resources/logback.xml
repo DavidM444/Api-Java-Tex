@@ -1,34 +1,42 @@
 <configuration>
+    <!-- Definir el directorio de logs -->
+    <property name="LOG_DIR" value="logs" />
 
-    <!-- Appender para la consola -->
+    <!-- Appender para consola -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %highlight(%-5level) %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <!-- Appender para guardar DEBUG en un archivo -->
-    <appender name="DEBUG_FILE" class="ch.qos.logback.core.FileAppender">
-        <file>logs/debug.log</file>
+    <!-- Appender para archivo debug -->
+    <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/debug.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Rotación diaria de logs -->
+            <fileNamePattern>${LOG_DIR}/debug.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- Mantener logs por 30 días -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
-        <!-- Solo acepta logs de nivel DEBUG -->
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>DEBUG</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
     </appender>
 
-    <!-- Logger para tu proyecto -->
-    <logger name="com.ctxt.textil.api" level="DEBUG" additivity="false">
+    <!-- Logger específico para tu proyecto -->
+    <logger name="ctxt.textil.api" level="DEBUG" additivity="false">
         <appender-ref ref="DEBUG_FILE" />
+        <appender-ref ref="CONSOLE" />
     </logger>
 
-    <!-- Logger raíz para otros niveles en la consola -->
+    <!-- Logger específico para seguridad -->
+    <logger name="ctxt.textil.api.infraestructure.security" level="DEBUG" additivity="false">
+        <appender-ref ref="DEBUG_FILE" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
     <root level="INFO">
         <appender-ref ref="CONSOLE" />
     </root>
-
 </configuration>

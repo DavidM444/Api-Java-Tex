@@ -43,10 +43,10 @@ public class Autenticacion {
         log.debug("autentication: {}" ,datosAutenticarUsuario);
         Authentication token = new UsernamePasswordAuthenticationToken(datosAutenticarUsuario.email(),datosAutenticarUsuario.clave());
         var usuarioAutenticado = authenticationManager.authenticate(token);
-        log.debug("22222 {}",usuarioAutenticado.toString());
+        log.debug("Usuario autenticado: {}",usuarioAutenticado.getName());
         var jwtToken = tokenService.generarToken((Usuario) usuarioAutenticado.getPrincipal());
         Integer userId = tokenService.getIdClaim(jwtToken);
-        log.debug("token: {}  id: {}",jwtToken,userId);
+        log.debug("token generado para usuario ID: {}",userId);
         Usuario user = userRepository.findByUsId(userId);
 
         DataUser data = new DataUser(user.getUsNombre(), user.getUsApellido(), user.getUsEmail(), jwtToken);
