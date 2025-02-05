@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,10 +18,9 @@ import java.io.IOException;
 
 /** Filtro que realiza la autenticacion de un usurio a traves de un token JWT(Json Web Token).
  * @params Request Http
- * @return Autenticicaion de usuario
  * @author Rodrigo David Muñoz
  */
-
+@Slf4j
 @Component
 public class SecurityFilter extends OncePerRequestFilter{
 
@@ -37,7 +37,7 @@ public class SecurityFilter extends OncePerRequestFilter{
     protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var tokenRequest = request.getHeader("authorization");
         String requestURI = request.getRequestURI();
-        System.out.println("token request: "+ tokenRequest + " uri "+requestURI);
+        log.info("Autorizando y Validando Uri: Token: {}, Uri: {}", tokenRequest, requestURI);
         if (tokenRequest !=null){
             var token = tokenRequest.replace("Bearer ", "");
             String iss = tokenService.getIssClaim(token, requestURI);

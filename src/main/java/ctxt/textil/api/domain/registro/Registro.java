@@ -30,7 +30,6 @@ public class Registro {
         this.userId = userId;
     }
     public void actualizarDatos(@Valid DatosActualizarRegistro datosActualizarRegistro) {
-        System.out.println("Entro a actualizar datos---- id a string " + datosActualizarRegistro.id());
         if(datosActualizarRegistro.fecha()!=null){
             this.reFecha = datosActualizarRegistro.fecha();
         }
