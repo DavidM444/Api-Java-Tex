@@ -7,6 +7,7 @@ import ctxt.textil.api.application.dto.request.DatosRegistroTodo;
 import ctxt.textil.api.application.dto.response.DtoRegistro;
 import ctxt.textil.api.application.dto.response.DtoInfo;
 import ctxt.textil.api.domain.registro.*;
+import ctxt.textil.api.infraestructure.exception.UserIdClaimNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -41,6 +42,7 @@ public class RegistroController {
     public ResponseEntity<DatosRegistro> crearRegistroCompleto(@RequestBody @Valid DatosRegistroTodo datosRegistroTodo,
                                                                HttpServletRequest request,
                                                                UriComponentsBuilder uriComponentsBuilder){
+
         Long Idcl = extractIdUser(request);
         Registro datosRegistroRegistro = new Registro(datosRegistroTodo.fecha(), datosRegistroTodo.proveedor(),Idcl);
         DatosRegistro registro =  registroService.guardarRegistro(datosRegistroTodo, Idcl);
@@ -94,10 +96,10 @@ public class RegistroController {
        return ResponseEntity.status(HttpStatus.FOUND).body(dto);
     }
 
-    public Long extractIdUser(HttpServletRequest request){
+    public Long extractIdUser(HttpServletRequest request) {
         Object id = request.getAttribute("Idcl");
         if(id==null){
-            throw new RuntimeException("Not found id. Register registro failded.");
+            throw new UserIdClaimNotFoundException();
         }
         return ((Integer)id).longValue();
     }
